@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your Cart | Little Nest — Baby Accessories</title><meta name="description" content="Little Nest — practical baby accessories for organized nurseries. Free US shipping over $35."><link rel="stylesheet" href="css/style.css"></head><body><header><div class="wrap nav"><a class="logo" href="index.html">Little Nest <span>— Baby Accessories</span></a><ul><li><a href="index.html#shop">Shop</a></li><li><a href="bundles.html">Bundles</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul><a class="cart-link" href="cart.html" aria-label="Cart">🛒<span class="cart-count">0</span></a></div></header>
+<main class="wrap content" style="padding:40px 20px"><h1>Your Cart</h1>
+<div id="cartArea"><div id="items"></div>
+<div class="summary"><div><span>Subtotal</span><span id="sub"></span></div><div><span>Shipping</span><span id="ship"></span></div><div style="font-weight:700;font-size:1.15rem"><span>Total (USD)</span><span id="tot"></span></div><p id="freeMsg" style="color:#7a746c;font-size:.9rem"></p>
+<p class="note">Sandbox demo — PayPal test mode, no real money is charged.</p><div id="paypal-button-container"></div></div></div>
+<div id="thanks" class="thanks" hidden><h2>Thank you for your order! 💚</h2><p id="thanksMsg"></p><a class="btn" href="index.html">Continue Shopping</a></div>
+</main>
+<footer><div class="wrap cols"><div><strong>Little Nest — Baby Accessories</strong><br>© 2026 Little Nest. All prices in USD.</div><div><a href="shipping.html">Shipping Policy</a><a href="returns.html">Returns</a><a href="privacy.html">Privacy Policy</a><a href="contact.html">Contact</a></div></div></footer><script src="js/cart.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&intent=capture"></script>
+<script>
+function render(){const c=getCart(),el=document.getElementById('items');
+ if(!c.length){el.innerHTML='<p>Your cart is empty. <a href="index.html#shop">Shop now</a></p>';document.getElementById('paypal-button-container').style.display='none'}
+ else el.innerHTML=c.map(x=>{const p=PRODUCTS[x.id];return `<div class="cart-row"><img src="${p.img}" alt=""><div><strong>${p.name}</strong><br>${money(p.price)}</div><div class="qty" style="margin:0"><button onclick="setQty('${x.id}',${x.qty-1});render()">−</button><span>${x.qty}</span><button onclick="setQty('${x.id}',${x.qty+1});render()">+</button></div><div class="lt">${money(p.price*x.qty)}</div><button class="remove rm" onclick="setQty('${x.id}',0);render()">Remove</button></div>`}).join('');
+ const t=totals();sub.textContent=money(t.sub);ship.textContent=t.ship?money(t.ship):'FREE';tot.textContent=money(t.total);
+ freeMsg.textContent=t.sub>0&&t.sub<FREE_SHIP?`Add ${money(FREE_SHIP-t.sub)} more for free US shipping.`:''}
+render();
+if(window.paypal){paypal.Buttons({style:{shape:'pill',color:'gold'},
+ createOrder:(d,a)=>{const t=totals();if(!t.total)return Promise.reject('Cart empty');return a.order.create({purchase_units:[{amount:{currency_code:'USD',value:t.total.toFixed(2)},description:'Little Nest order'}]})},
+ onApprove:async(d,a)=>{const det=await a.order.capture();const items=getCart();
+  const payload={paypalOrderId:det.id,payer:det.payer,shipping:det.purchase_units?.[0]?.shipping,items:items.map(x=>({id:x.id,qty:x.qty}))};
+  console.log('[mock] POST /api/create-cj-order',payload);
+  fetch('/api/create-cj-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(r=>r.json()).then(j=>console.log('[mock] response',j)).catch(e=>console.log('[mock] API not available locally:',e.message));
+  localStorage.removeItem(KEY);updateCount();cartArea.hidden=true;thanks.hidden=false;
+  thanksMsg.textContent=`Order ${det.id} confirmed${det.payer?.name?.given_name?', '+det.payer.name.given_name:''}. You'll receive a tracking email once it ships (3–7 business days).`},
+ onError:e=>{console.error(e);toast('Payment error — please try again')}}).render('#paypal-button-container')}
+else document.getElementById('paypal-button-container').textContent='PayPal could not load. Check your connection.';
+</script></body></html>

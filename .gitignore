@@ -1,3 +1,5 @@
 node_modules
 data/db.local.json
-.env*
+.env
+.env.local
+.vercel

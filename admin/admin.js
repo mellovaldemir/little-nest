@@ -62,13 +62,15 @@ let STORAGE = "file";
 function shell(active, title, actions = "") {
   const nav = [["dashboard", "Dashboard", I.dash], ["products", "Products", I.prod], ["orders", "Orders", I.ord], ["banners", "Banners", I.ban], ["coupons", "Coupons", I.cup]];
   $("#app").innerHTML = `<div class="layout"><aside class="sidebar"><div class="in">
-    <div class="brand"><img src="${MASCOT}" alt=""><div><b>ARROW</b><small>Admin panel</small></div></div>
+    <div class="brand"><img src="${MASCOT}" alt=""><div><b>ARROW</b><small>Admin panel</small></div><button class="adm-burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
     ${nav.map(([k, l, ic]) => `<a href="#${k}" class="${active === k ? "on" : ""}">${ic}${l}</a>`).join("")}
     <div class="bottom"><a href="/" target="_blank">${I.store}View store</a><a href="#" id="logout">${I.out}Log out</a></div></div></aside>
     <main><div class="top"><h1>${title}</h1><div class="row">${actions}</div></div>
     ${STORAGE === "file" ? '<div class="banner info">Local test mode — data is saved in <code>data/db.local.json</code> on this computer.</div>' : ""}
     ${STORAGE === "readonly" ? '<div class="banner warn">Storage is not configured on Vercel, so changes cannot be saved. Add the KV_REST_API_URL and KV_REST_API_TOKEN environment variables (see README).</div>' : ""}
     <div id="view"></div></main></div>`;
+  const sb = $(".sidebar");
+  $(".adm-burger").onclick = () => { const o = sb.classList.toggle("open"); $(".adm-burger").setAttribute("aria-expanded", o); };
   $("#logout").onclick = async (e) => { e.preventDefault(); await api("POST", "/api/auth?action=logout"); renderLogin(); };
   return $("#view");
 }
@@ -373,4 +375,15 @@ async function route() {
   } catch (e) { if (e.message !== "Please log in") toast(e.message, true); console.error(e); }
 }
 window.addEventListener("hashchange", route);
+// Give every table cell the text of its column header (data-label). On phones the CSS
+// turns each table row into a card and shows these labels next to the values.
+function labelTables(root = document) {
+  root.querySelectorAll("table").forEach((t) => {
+    const heads = [...t.querySelectorAll("thead th")].map((th) => th.textContent.trim());
+    if (!heads.length) return;
+    t.classList.add("cards");
+    t.querySelectorAll("tbody tr").forEach((tr) => [...tr.children].forEach((td, i) => { if (!td.hasAttribute("data-label") && !td.hasAttribute("colspan")) td.setAttribute("data-label", heads[i] || ""); }));
+  });
+}
+new MutationObserver(() => labelTables()).observe(document.getElementById("app"), { childList: true, subtree: true });
 route();

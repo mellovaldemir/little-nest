@@ -93,15 +93,22 @@ function renderChrome(active) {
   const q = new URLSearchParams(location.search).get("q") || "";
   if (h) h.innerHTML = `<div class="announce" id="announce">Free US shipping on orders over $35</div>
   <header class="site"><div class="wrap nav">
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu"><span></span><span></span><span></span></button>
     <a class="logo" href="/index.html" aria-label="ARROW home"><b>ARROW</b>${ARROW_SVG}</a>
     <form class="search" action="/shop.html"><input name="q" placeholder="Search" value="${esc(q)}" aria-label="Search products"><button aria-label="Search">${ICONS.search.replace("<svg", '<svg width="20" height="20"')}</button></form>
-    <ul class="menu">
+    <ul class="menu" id="siteMenu">
+      <li class="m-only drawer-head"><a class="logo" href="/index.html" aria-label="ARROW home"><b>ARROW</b>${ARROW_SVG}</a><button class="burger-x" type="button" aria-label="Close menu">&times;</button></li>
       <li><a href="/shop.html" class="${active === "shop" ? "on" : ""}">Shop</a></li>
       <li><a href="/shop.html?view=new" class="${active === "new" ? "on" : ""}">New</a></li>
       <li><a href="/shop.html?view=bestsellers" class="${active === "best" ? "on" : ""}">Bestsellers</a></li>
       <li><a href="/shop.html?view=bundles" class="${active === "bundles" ? "on" : ""}">Bundles</a></li>
       <li><a href="/shop.html?view=sale" class="${active === "sale" ? "on" : ""}">Sale</a></li>
+      <li class="m-only sep"><a href="/about.html" class="${active === "about" ? "on" : ""}">Our story</a></li>
+      <li class="m-only"><a href="/policies.html" class="${active === "help" ? "on" : ""}">Help &amp; policies</a></li>
+      <li class="m-only"><a href="/about.html#contact">Contact us</a></li>
+      <li class="m-only drawer-promo"><img src="${MASCOT}" alt=""><span>Free US shipping<br>on orders over $35</span></li>
     </ul>
+    <div class="scrim" hidden></div>
     <a class="cart-link" href="/cart.html" aria-label="Cart">${ICONS.cart}<span class="cart-count">0</span></a>
   </div></header>`;
   if (f) f.innerHTML = `<footer class="site">
@@ -116,6 +123,16 @@ function renderChrome(active) {
    <div class="fbottom"><div class="wrap"><span>© ${new Date().getFullYear()} ARROW Baby Accessories · All prices in USD</span>
      <div class="pays"><span class="pp">Pay<i>Pal</i></span><span>VISA</span><span>Mastercard</span><span>AMEX</span></div></div></div></footer>`;
   updateCount();
+  // mobile menu (hamburger) — the button is only visible on small screens
+  const hd = $("header.site");
+  if (hd) {
+    const burger = $(".burger", hd), scrim = $(".scrim", hd);
+    const setOpen = (o) => { hd.classList.toggle("open", o); burger.setAttribute("aria-expanded", o); scrim.hidden = !o; document.body.classList.toggle("noscroll", o); };
+    burger.onclick = () => setOpen(!hd.classList.contains("open"));
+    scrim.onclick = () => setOpen(false); $(".burger-x", hd).onclick = () => setOpen(false);
+    $$(".menu a", hd).forEach((a) => a.addEventListener("click", () => setOpen(false)));
+    addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+  }
   loadSettings().then((s) => {
     if (s.announcement) $("#announce").textContent = s.announcement;
     if (s.contactEmail) $$(".email").forEach((a) => { a.textContent = s.contactEmail; a.href = "mailto:" + s.contactEmail; });

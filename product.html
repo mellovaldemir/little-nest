@@ -25,6 +25,7 @@
   </div>
   <section class="block"><div class="sec-head"><h2>You may also like</h2><a href="/shop.html">View all →</a></div><div class="grid" id="related"></div></section>
 </main>
+<div class="stickybar" id="stickybar" aria-hidden="true"><div class="sb-info"><b id="sbName"></b><span class="price" id="sbPrice"></span></div><button class="btn" id="sbAdd" type="button" tabindex="-1">Add to cart</button></div>
 <div id="site-footer"></div>
 <script src="/js/store.js"></script>
 <script>
@@ -49,6 +50,12 @@ const id = new URLSearchParams(location.search).get("id");
   $("#minus").onclick = () => ($("#qty").value = Math.max(1, (+$("#qty").value || 1) - 1));
   $("#plus").onclick = () => ($("#qty").value = (+$("#qty").value || 1) + 1);
   $("#addBtn").onclick = () => addToCart(p.id, Math.max(1, parseInt($("#qty").value) || 1), p.name);
+  // sticky add-to-cart bar on phones: shown while the main button is off-screen
+  $("#sbName").textContent = p.name; $("#sbPrice").innerHTML = money(p.price) + (sale ? `<s>${money(p.compareAt)}</s>` : "");
+  $("#sbAdd").onclick = () => $("#addBtn").click();
+  document.body.classList.add("has-sticky");
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => $("#stickybar").classList.toggle("show", !e.isIntersecting)).observe($("#addBtn"));
+  else $("#stickybar").classList.add("show");
   const panes = {
     desc: `<p>${esc(p.description)}</p>${p.benefits?.length ? `<ul>${p.benefits.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : ""}`,
     details: `<p><b>Category:</b> ${CATEGORIES[p.category] || "-"}</p><p><b>Care:</b> see the product label for cleaning instructions.</p>`,

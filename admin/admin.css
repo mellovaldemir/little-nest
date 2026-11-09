@@ -57,7 +57,7 @@ label.f input:focus,label.f select:focus,label.f textarea:focus,.inp:focus{outli
 .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:6px 14px;font-weight:800;cursor:pointer}.tabs button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
 /* login */
 .login{min-height:100vh;display:grid;place-items:center;background:var(--forest) url(/img/brand/forest-banner.jpg) center/cover}
-.login .box{background:var(--cream);border-radius:22px;padding:34px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
+.login .box{background:var(--cream);border-radius:22px;padding:34px 36px;width:min(380px,100%);box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
 .login img{height:150px;margin:-90px auto 6px;display:block}.login h1{font-size:2rem}.login p{color:var(--muted);margin:4px 0 20px;font-weight:600}
 .login input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:12px;background:#fff}
 .login .btn{width:100%;justify-content:center;padding:13px}.err{color:var(--pink);font-weight:800;min-height:20px;margin-top:10px;font-size:.9rem}
@@ -68,3 +68,55 @@ label.f input:focus,label.f select:focus,label.f textarea:focus,.inp:focus{outli
 .dialog .sum{background:var(--cream);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:.92rem}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest-d);color:#fff;padding:11px 20px;border-radius:99px;font-weight:800;opacity:0;transition:.3s;pointer-events:none;z-index:60}.toast.show{opacity:1}.toast.bad{background:var(--pink)}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{min-height:0}.sidebar .in{position:static;height:auto;flex-direction:row;flex-wrap:wrap}.sidebar .bottom{margin:0;border:0;padding:0}.stats{grid-template-columns:1fr 1fr}.two,.form-grid,.slide-ed{grid-template-columns:1fr}main{padding:18px}}
+
+/* ================= MOBILE admin — desktop untouched ================= */
+.adm-burger{display:none}
+@media(max-width:900px){
+.layout{grid-template-columns:minmax(0,1fr)}
+.sidebar{position:sticky;top:0;z-index:40;padding:8px 14px;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.sidebar .in{flex-direction:column;flex-wrap:nowrap;gap:2px}
+.brand{padding:0;min-height:52px}.brand img{width:40px;height:40px}
+.adm-burger{display:flex;flex-direction:column;justify-content:center;gap:5px;margin-left:auto;width:46px;height:46px;padding:0 11px;border:0;border-radius:12px;background:rgba(255,255,255,.1);cursor:pointer}
+.adm-burger span{display:block;height:2.6px;border-radius:2px;background:#fbf5e6}
+.sidebar .in>a,.sidebar .bottom{display:none}
+.sidebar.open .in>a,.sidebar.open .bottom{display:block}
+.sidebar.open .in{padding-bottom:8px}
+.sidebar a{min-height:48px;font-size:1.05rem}
+.sidebar.open .in>a{display:flex}.sidebar.open .bottom a{display:flex}
+.sidebar .bottom{border-top:1px solid rgba(255,255,255,.15)!important;padding-top:6px!important;margin-top:6px!important}
+}
+@media(max-width:760px){
+body{font-size:15px}
+main{padding:14px}
+.top{flex-wrap:wrap;margin-bottom:14px}.top h1{font-size:1.55rem}
+.top .row{width:100%}.top .row .btn{flex:1;justify-content:center}
+.btn{min-height:44px;justify-content:center}.btn.sm{min-height:44px;padding:10px 14px;font-size:.9rem}
+label.f input,label.f select,label.f textarea,.inp,.login input,input,select,textarea{font-size:16px!important}
+label.f input,label.f select,.inp,.login input{min-height:46px}
+.panel{padding:14px;border-radius:14px}
+.stats{gap:10px}.stat{padding:14px}.stat b{font-size:1.5rem}
+.tabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 14px;padding:0 14px 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;min-height:44px;padding:0 16px}
+.kv{grid-template-columns:110px minmax(0,1fr)}.kv dd{word-break:break-word}
+.login{padding:90px 16px 24px}.login .box{padding:28px 22px}
+.dialog{padding:20px}.dialog .acts{flex-wrap:wrap}.dialog .acts .btn{flex:1}
+.imgbox,.upload{width:calc(50% - 6px)}.imgbox img{width:100%;height:auto;aspect-ratio:1}.upload{height:auto;aspect-ratio:1}
+.slide-ed{padding:10px}
+/* tables become cards (labels come from data-label, set by admin.js) */
+table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+table.cards thead{display:none}
+table.cards tbody tr{border:1px solid var(--line);border-radius:14px;padding:6px 14px;margin-bottom:10px;background:#fffdf8}
+table.cards tbody tr:hover{background:#fffdf8}
+table.cards td{border:0;border-bottom:1px dashed #efe7d6;padding:9px 0;text-align:right;display:flow-root;white-space:normal!important}
+table.cards td:last-child{border-bottom:0}
+table.cards td[data-label]:not([data-label=""]):before{content:attr(data-label);float:left;margin-right:12px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);line-height:1.9}
+table.cards td[data-label=""]{text-align:left}
+table.cards td[data-label=""]:last-child{text-align:right;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+table.cards td[data-label=""]:last-child .btn{flex:1}
+table.cards td[colspan]{text-align:center}
+table.cards .thumb{width:64px;height:64px}
+table.cards label.tg{display:inline-flex;min-height:44px}
+label.tg{min-height:44px}
+.panel .row>a[href^="#"]{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+.panel{overflow-x:auto}
+}

@@ -1,0 +1,27 @@
+{
+ "announcement": "Free US shipping on orders over $35",
+ "contactEmail": "hello@arrowbaby.com",
+ "slides": [
+  {
+   "image": "img/slides/slide1.jpg",
+   "headline": "Aim for little adventures",
+   "subtitle": "Simple, safe accessories for busy parents",
+   "buttonText": "Shop the Quiver",
+   "buttonLink": "shop.html"
+  },
+  {
+   "image": "img/slides/slide2.jpg",
+   "headline": "Free shipping over $35",
+   "subtitle": "Fast delivery from US warehouses",
+   "buttonText": "Start shopping",
+   "buttonLink": "shop.html"
+  },
+  {
+   "image": "img/slides/slide3.jpg",
+   "headline": "The Diaper Caddy",
+   "subtitle": "Everything in reach, every change · $22.99",
+   "buttonText": "Shop now",
+   "buttonLink": "product.html?id=diaper-caddy"
+  }
+ ]
+}

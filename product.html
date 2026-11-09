@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<div id="site-header"></div>
+<main class="wrap" id="pdp-root">
+  <div class="crumbs" id="crumbs"><a href="/index.html">Home</a></div>
+  <div class="pdp">
+    <div class="gallery"><div class="main" id="main"><div class="skeleton" style="height:100%"></div></div><div class="thumbs" id="thumbs"></div></div>
+    <div class="buybox">
+      <h1 id="name">&nbsp;</h1>
+      <div id="price" class="price"></div>
+      <p id="short" style="margin:14px 0 0"></p>
+      <div class="qtybox"><button type="button" id="minus" aria-label="Decrease">−</button><input id="qty" type="number" min="1" value="1" aria-label="Quantity"><button type="button" id="plus" aria-label="Increase">+</button></div>
+      <button class="btn add" id="addBtn">Add to cart</button>
+      <ul class="perks" id="perks"></ul>
+      <img class="mascot" src="/img/brand/mascot.png" alt="">
+    </div>
+  </div>
+  <div class="tabs"><nav><button class="on" data-t="desc">Description</button><button data-t="details">Details</button><button data-t="ship">Shipping &amp; returns</button></nav>
+    <div class="pane" id="pane"></div></div>
+  <div class="revbox">
+    <div><h2 style="margin:0 0 6px">Customer reviews</h2><p style="margin:0;color:var(--muted)">Be the first to share your experience.</p></div>
+    <!-- Reviews placeholder: no real reviews yet. Connect a review app or add real reviews here later. -->
+    <div class="empty-rev"><b>No reviews yet</b><br><span style="color:var(--muted)">Reviews from verified buyers will appear here.</span></div>
+  </div>
+  <section class="block"><div class="sec-head"><h2>You may also like</h2><a href="/shop.html">View all →</a></div><div class="grid" id="related"></div></section>
+</main>
+<div id="site-footer"></div>
+<script src="/js/store.js"></script>
+<script>
+renderChrome("shop");
+const id = new URLSearchParams(location.search).get("id");
+(async () => {
+  const all = await loadProducts();
+  const p = all.find((x) => x.id === id);
+  if (!p) { $("#pdp-root").innerHTML = '<div class="empty"><h2>Product not found</h2><a class="btn" href="/shop.html">Back to shop</a></div>'; return; }
+  document.title = p.name + " | ARROW Baby Accessories";
+  $("#crumbs").innerHTML = `<a href="/index.html">Home</a> › <a href="/shop.html?cat=${p.category}">${CATEGORIES[p.category] || "Shop"}</a> › ${esc(p.name)}`;
+  $("#name").textContent = p.name;
+  const sale = p.compareAt && p.compareAt > p.price;
+  $("#price").innerHTML = money(p.price) + (sale ? `<s>${money(p.compareAt)}</s><span class="save">Save ${Math.round((1 - p.price / p.compareAt) * 100)}%</span>` : "");
+  $("#short").textContent = p.example ? "Example product — details coming soon." : (p.description || "").split(". ")[0] + ".";
+  const imgs = (p.images || []).map(img);
+  const showMain = (u) => ($("#main").innerHTML = u ? `<img src="${esc(u)}" alt="${esc(p.name)}">` : `<div class="ph"><img src="${MASCOT}" alt=""><small>Example product · photo coming soon</small></div>`);
+  showMain(imgs[0]);
+  $("#thumbs").innerHTML = imgs.length > 1 ? imgs.map((u, i) => `<button class="${i ? "" : "on"}"><img src="${esc(u)}" alt=""></button>`).join("") : "";
+  $$("#thumbs button").forEach((b, i) => (b.onclick = () => { showMain(imgs[i]); $$("#thumbs button").forEach((x) => x.classList.remove("on")); b.classList.add("on"); }));
+  $("#perks").innerHTML = [["truck", "Free US shipping over $35"], ["ret", "30-day returns"], ["clock", "Ships in 3–7 business days"]].map(([i, t]) => `<li>${ICONS[i]}${t}</li>`).join("");
+  $("#minus").onclick = () => ($("#qty").value = Math.max(1, (+$("#qty").value || 1) - 1));
+  $("#plus").onclick = () => ($("#qty").value = (+$("#qty").value || 1) + 1);
+  $("#addBtn").onclick = () => addToCart(p.id, Math.max(1, parseInt($("#qty").value) || 1), p.name);
+  const panes = {
+    desc: `<p>${esc(p.description)}</p>${p.benefits?.length ? `<ul>${p.benefits.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : ""}`,
+    details: `<p><b>Category:</b> ${CATEGORIES[p.category] || "-"}</p><p><b>Care:</b> see the product label for cleaning instructions.</p>`,
+    ship: `<p>Orders are processed in 1–2 business days and delivered in 3–7 business days within the US. Shipping is $4.99, free on orders over $35. Unused items can be returned within 30 days — see our <a href="/policies.html#returns">Returns policy</a>.</p>`,
+  };
+  const showPane = (t) => { $("#pane").innerHTML = panes[t]; $$(".tabs nav button").forEach((b) => b.classList.toggle("on", b.dataset.t === t)); };
+  $$(".tabs nav button").forEach((b) => (b.onclick = () => showPane(b.dataset.t))); showPane("desc");
+  const rel = all.filter((x) => x.id !== p.id).sort((a, b) => (b.category === p.category) - (a.category === p.category)).slice(0, 4);
+  $("#related").innerHTML = rel.map(productCard).join("");
+})();
+</script></body></html>

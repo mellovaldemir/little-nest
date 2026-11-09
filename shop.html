@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop all | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<div id="site-header"></div>
+<section class="pagehero"><div class="wrap"><h1 id="title">Shop all adventures</h1></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
+<div class="wrap shop">
+  <aside class="filters">
+    <div class="grp"><h4>Category</h4><div id="catf"></div></div>
+    <div class="grp"><h4>Max price: <span id="pv"></span></h4><input type="range" id="price" min="5" max="60" step="1" value="60"></div>
+    <div class="grp"><label style="justify-content:space-between"><h4 style="margin:0">On sale</h4><span class="switch"><input type="checkbox" id="sale"><i></i></span></label></div>
+    <button class="btn ghost sm" id="reset">Clear filters</button>
+  </aside>
+  <div>
+    <div id="notice"></div>
+    <div class="toolbar"><h3 id="count">Loading…</h3>
+      <select class="sort" id="sort" aria-label="Sort"><option value="featured">Sort by: Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name A–Z</option><option value="new">Newest</option></select></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+<div id="site-footer"></div>
+<script src="/js/store.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const view = params.get("view"), q = (params.get("q") || "").toLowerCase();
+renderChrome({ new: "new", bestsellers: "best", bundles: "bundles", sale: "sale" }[view] || "shop");
+const TITLES = { new: "New arrivals", bestsellers: "Bestsellers", bundles: "Bundle & save 15%", sale: "On sale" };
+if (TITLES[view]) $("#title").textContent = TITLES[view];
+if (q) $("#title").textContent = `Results for “${params.get("q")}”`;
+if (view === "bundles") $("#notice").innerHTML = '<div class="notice">🎯 Mix and match any products. Spend $50+ and use code <b>BUNDLE15</b> at checkout to save 15%.</div>';
+$("#catf").innerHTML = Object.entries(CATEGORIES).map(([k, v]) => `<label><input type="checkbox" value="${k}" ${params.get("cat") === k ? "checked" : ""}> ${v}</label>`).join("");
+if (view === "sale") $("#sale").checked = true;
+
+loadProducts().then((all) => {
+  const max = Math.ceil(Math.max(...all.map((p) => p.price), 10));
+  $("#price").max = max; $("#price").value = max;
+  function apply() {
+    const cats = $$("#catf input:checked").map((i) => i.value), pmax = +$("#price").value, sale = $("#sale").checked;
+    $("#pv").textContent = money(pmax).replace(".00", "");
+    let list = all.filter((p) => (!cats.length || cats.includes(p.category)) && p.price <= pmax && (!sale || (p.compareAt && p.compareAt > p.price)));
+    if (view === "new") list = list.filter((p) => p.isNew);
+    if (view === "bestsellers") list = list.filter((p) => p.bestseller);
+    if (q) list = list.filter((p) => (p.name + " " + p.description + " " + (CATEGORIES[p.category] || "")).toLowerCase().includes(q));
+    const s = $("#sort").value;
+    if (s === "low") list.sort((a, b) => a.price - b.price);
+    if (s === "high") list.sort((a, b) => b.price - a.price);
+    if (s === "name") list.sort((a, b) => a.name.localeCompare(b.name));
+    if (s === "new") list.sort((a, b) => (b.isNew - a.isNew));
+    $("#count").textContent = `${list.length} product${list.length === 1 ? "" : "s"}`;
+    $("#grid").innerHTML = list.map(productCard).join("") || '<div class="empty" style="grid-column:1/-1">No products match these filters.</div>';
+  }
+  $$(".filters input, #sort").forEach((el) => el.addEventListener("input", apply));
+  $("#reset").onclick = () => { $$("#catf input").forEach((i) => (i.checked = false)); $("#sale").checked = false; $("#price").value = max; apply(); };
+  apply();
+});
+</script></body></html>

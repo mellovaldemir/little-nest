@@ -1,0 +1,419 @@
+{
+ "products": [
+  {
+   "id": "diaper-caddy",
+   "name": "Felt Diaper Caddy",
+   "price": 22.99,
+   "compareAt": 29.99,
+   "cost": 9.5,
+   "category": "nursery",
+   "description": "Diaper changes go smoother when everything is in reach. Our Felt Diaper Caddy organizes diapers, wipes, lotions and small essentials in a soft, neutral basket that looks at home on a changing table, dresser, or car seat. Approx. 15 × 9 × 7 in. Spot clean only.",
+   "benefits": [
+    "Keeps diapers, wipes and creams in one portable spot",
+    "Removable dividers — customize the compartments",
+    "Soft, sturdy felt that holds its shape",
+    "Carry handle for easy room-to-room changes"
+   ],
+   "images": [
+    "img/diaper-caddy.jpg",
+    "img/hero.jpg"
+   ],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": false,
+   "sort": 1
+  },
+  {
+   "id": "stroller-organizer",
+   "name": "Stroller Organizer with Cup Holders",
+   "price": 21.99,
+   "compareAt": null,
+   "cost": 8.2,
+   "category": "on-the-go",
+   "description": "Keep your phone, keys, snacks and two drinks right at the handlebar. Fits most strollers with adjustable straps and folds flat when you don't need it.",
+   "benefits": [
+    "Two insulated cup holders",
+    "Zip pocket for phone and keys",
+    "Universal adjustable straps",
+    "Folds flat with the stroller"
+   ],
+   "images": [
+    "img/stroller-organizer.jpg"
+   ],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": false,
+   "sort": 2
+  },
+  {
+   "id": "stroller-fan",
+   "name": "Clip-on Stroller Fan",
+   "price": 19.99,
+   "compareAt": null,
+   "cost": 6.9,
+   "category": "on-the-go",
+   "description": "A quiet, rechargeable fan with a flexible clip that grips stroller frames, car seats and crib rails. Keeps little ones cool on warm days.",
+   "benefits": [
+    "Quiet 3-speed motor",
+    "Flexible clip with 360° rotation",
+    "USB rechargeable",
+    "Finger-safe grille"
+   ],
+   "images": [
+    "img/stroller-fan.jpg"
+   ],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": false,
+   "sort": 3
+  },
+  {
+   "id": "baby-proofing-kit",
+   "name": "Baby Proofing Kit",
+   "price": 14.99,
+   "compareAt": null,
+   "cost": 4.8,
+   "category": "safety",
+   "description": "Everything you need to start baby-proofing in one box: outlet covers, corner guards and cabinet latches. No drilling needed.",
+   "benefits": [
+    "Outlet covers, corner guards and cabinet latches",
+    "Adhesive install — no tools",
+    "Clear finish blends with furniture",
+    "Easy for adults to remove"
+   ],
+   "images": [
+    "img/baby-proofing-kit.jpg"
+   ],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": false,
+   "sort": 4
+  },
+  {
+   "id": "potty-seat-step",
+   "name": "Potty Training Seat with Step Ladder",
+   "price": 34.99,
+   "compareAt": 45.0,
+   "cost": 14.0,
+   "category": "bath",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Foldable potty seat with a non-slip step ladder that fits most standard toilets.",
+   "benefits": [
+    "Non-slip steps",
+    "Soft padded seat",
+    "Folds for storage"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": true,
+   "sort": 5
+  },
+  {
+   "id": "stroller-cup-holder",
+   "name": "Stroller Cup & Phone Holder",
+   "price": 16.99,
+   "compareAt": null,
+   "cost": 5.5,
+   "category": "on-the-go",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Clamp-on holder for a drink and a phone, adjustable for most stroller bars.",
+   "benefits": [
+    "Fits most stroller bars",
+    "Holds cups and bottles",
+    "Phone slot"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": true,
+   "sort": 6
+  },
+  {
+   "id": "tummy-time-mat",
+   "name": "LED Tummy Time Water Mat",
+   "price": 19.99,
+   "compareAt": null,
+   "cost": 6.0,
+   "category": "nursery",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Inflatable water play mat with floating sea friends for tummy time.",
+   "benefits": [
+    "Leak-resistant",
+    "Floating sea friends",
+    "Easy to inflate"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": true,
+   "sort": 7
+  },
+  {
+   "id": "gift-crate",
+   "name": "Wooden Baby Gift Crate",
+   "price": 39.99,
+   "compareAt": 50.0,
+   "cost": 15.0,
+   "category": "nursery",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Natural wood crate for storing toys, blankets or putting together a baby shower gift.",
+   "benefits": [
+    "Natural pine wood",
+    "Rounded edges",
+    "Great for gifts"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": true,
+   "isNew": false,
+   "example": true,
+   "sort": 8
+  },
+  {
+   "id": "baby-carrier",
+   "name": "Ergonomic Baby Carrier",
+   "price": 45.99,
+   "compareAt": null,
+   "cost": 19.0,
+   "category": "on-the-go",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Padded carrier with lumbar support for front carrying.",
+   "benefits": [
+    "Lumbar support",
+    "Padded straps",
+    "Breathable fabric"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": true,
+   "example": true,
+   "sort": 9
+  },
+  {
+   "id": "muslin-swaddle",
+   "name": "Organic Muslin Swaddle",
+   "price": 24.99,
+   "compareAt": null,
+   "cost": 7.5,
+   "category": "nursery",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Soft, breathable organic cotton muslin swaddle blanket.",
+   "benefits": [
+    "Organic cotton",
+    "Breathable",
+    "Gets softer with every wash"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": true,
+   "example": true,
+   "sort": 10
+  },
+  {
+   "id": "teething-ring",
+   "name": "Wooden Teething Ring",
+   "price": 12.99,
+   "compareAt": null,
+   "cost": 3.2,
+   "category": "nursery",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Smooth wooden teething ring with a soft silicone charm.",
+   "benefits": [
+    "Natural wood",
+    "Food-grade silicone",
+    "Easy to grip"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": true,
+   "example": true,
+   "sort": 11
+  },
+  {
+   "id": "insulated-bottle",
+   "name": "Insulated Baby Bottle",
+   "price": 18.99,
+   "compareAt": null,
+   "cost": 6.8,
+   "category": "on-the-go",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Keeps milk warm or cool on the go.",
+   "benefits": [
+    "Double-wall insulation",
+    "Leak-proof lid",
+    "BPA-free"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": true,
+   "example": true,
+   "sort": 12
+  },
+  {
+   "id": "bath-duck",
+   "name": "Yellow Bath Duck",
+   "price": 8.99,
+   "compareAt": null,
+   "cost": 1.9,
+   "category": "bath",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Classic squeaky bath duck for bath-time fun.",
+   "benefits": [
+    "Soft and squeezable",
+    "Floats upright"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": false,
+   "example": true,
+   "sort": 13
+  },
+  {
+   "id": "outlet-covers",
+   "name": "Outlet Covers (24-pack)",
+   "price": 9.99,
+   "compareAt": 12.99,
+   "cost": 2.4,
+   "category": "safety",
+   "description": "EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. Clear plug-in outlet covers to keep little fingers safe.",
+   "benefits": [
+    "24 covers",
+    "Easy for adults to remove"
+   ],
+   "images": [],
+   "cjLink": "",
+   "cjSku": "",
+   "active": true,
+   "bestseller": false,
+   "isNew": false,
+   "example": true,
+   "sort": 14
+  }
+ ],
+ "settings": {
+  "announcement": "Free US shipping on orders over $35",
+  "contactEmail": "hello@arrowbaby.com",
+  "slides": [
+   {
+    "image": "img/slides/slide1.jpg",
+    "headline": "Aim for little adventures",
+    "subtitle": "Simple, safe accessories for busy parents",
+    "buttonText": "Shop the Quiver",
+    "buttonLink": "shop.html"
+   },
+   {
+    "image": "img/slides/slide2.jpg",
+    "headline": "Free shipping over $35",
+    "subtitle": "Fast delivery from US warehouses",
+    "buttonText": "Start shopping",
+    "buttonLink": "shop.html"
+   },
+   {
+    "image": "img/slides/slide3.jpg",
+    "headline": "The Diaper Caddy",
+    "subtitle": "Everything in reach, every change · $22.99",
+    "buttonText": "Shop now",
+    "buttonLink": "product.html?id=diaper-caddy"
+   }
+  ]
+ },
+ "coupons": [
+  {
+   "code": "WELCOME10",
+   "type": "percent",
+   "value": 10,
+   "minSubtotal": 0,
+   "active": true,
+   "createdAt": "2026-11-09T12:00:00.000Z"
+  },
+  {
+   "code": "BUNDLE15",
+   "type": "percent",
+   "value": 15,
+   "minSubtotal": 50,
+   "active": true,
+   "createdAt": "2026-11-09T12:00:00.000Z"
+  }
+ ],
+ "orders": [
+  {
+   "id": "AR-SAMPLE1",
+   "sample": true,
+   "createdAt": "2026-11-08T15:20:00.000Z",
+   "status": "new",
+   "paypalOrderId": "SAMPLE-NOT-REAL",
+   "customer": {
+    "name": "Sample Customer (test data)",
+    "email": "sample@example.com"
+   },
+   "address": {
+    "address_line_1": "123 Example St",
+    "admin_area_2": "Austin",
+    "admin_area_1": "TX",
+    "postal_code": "73301",
+    "country_code": "US"
+   },
+   "items": [
+    {
+     "id": "diaper-caddy",
+     "name": "Felt Diaper Caddy",
+     "price": 22.99,
+     "cost": 9.5,
+     "qty": 1,
+     "cjSku": "",
+     "cjLink": ""
+    },
+    {
+     "id": "stroller-fan",
+     "name": "Clip-on Stroller Fan",
+     "price": 19.99,
+     "cost": 6.9,
+     "qty": 1,
+     "cjSku": "",
+     "cjLink": ""
+    }
+   ],
+   "subtotal": 42.98,
+   "discount": 0,
+   "coupon": null,
+   "shipping": 0,
+   "total": 42.98,
+   "history": [
+    {
+     "at": "2026-11-08T15:20:00.000Z",
+     "status": "new"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help &amp; Policies | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<div id="site-header"></div>
+<section class="pagehero"><div class="wrap"><h1>Help &amp; Policies</h1></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
+<!-- PLACEHOLDER POLICY TEXT: review/adjust with your final policies before launch. -->
+<div class="wrap pol">
+  <nav class="side" id="side"></nav>
+  <article id="doc"></article>
+</div>
+<div id="site-footer"></div>
+<script src="/js/store.js"></script>
+<script>
+renderChrome("help");
+const DOCS = {
+  shipping: { t: "Shipping Policy", i: "truck", html: `
+    <h3>${ICONS.clock}Processing time</h3><p>Orders are processed within 1–2 business days.</p>
+    <h3>${ICONS.truck}Delivery times &amp; rates</h3>
+    <table><tr><th>Method</th><th>Delivery</th><th>Cost</th></tr>
+    <tr><td>US Standard</td><td>3–7 business days</td><td>$4.99</td></tr>
+    <tr><td>US Standard — orders over $35</td><td>3–7 business days</td><td><b>FREE</b></td></tr></table>
+    <h3>${ICONS.search}Tracking info</h3><p>You will receive an email with your tracking number as soon as your order ships.</p>
+    <h3>${ICONS.box}Where we ship</h3><p>We currently ship to addresses in the United States only.</p>` },
+  returns: { t: "Returns & Refunds", i: "box", html: `
+    <h3>${ICONS.ret}30-day returns</h3><p>You may return unused items in their original packaging within 30 days of delivery.</p>
+    <h3>${ICONS.mail}How to start a return</h3><p>Contact us with your order number and we'll send you the return instructions.</p>
+    <h3>${ICONS.lock}Refunds</h3><p>Refunds are issued to the original payment method once the return is received and inspected (usually within 5 business days).</p>
+    <h3>${ICONS.shield}Damaged or wrong item?</h3><p>Send us a photo within 7 days of delivery and we'll make it right with a replacement or a full refund.</p>` },
+  privacy: { t: "Privacy Policy", i: "shield", html: `
+    <p>We collect only the information needed to process and ship your order: name, shipping address and email.</p>
+    <p>Payments are processed by PayPal. We never see or store your card details.</p>
+    <p>If you subscribe to our newsletter we store your email address to send you offers. You can unsubscribe at any time.</p>
+    <p>We do not sell your personal data. Questions? Contact us at any time.</p>` },
+  terms: { t: "Terms of Service", i: "doc", html: `
+    <p>By placing an order on this website you agree to these terms.</p>
+    <p>All prices are in US dollars. We may update prices and product availability at any time. If an item is unavailable after you order, we will refund you in full.</p>
+    <p>Products must be used as described and under adult supervision. Always follow the safety instructions included with each product.</p>
+    <p>Discount codes cannot be combined and have no cash value.</p>` },
+  faq: { t: "FAQ", i: "help", html: `<div class="faq">
+    <details open><summary>How do I track my order?</summary><p>When your order ships you'll get an email with a tracking number and link.</p></details>
+    <details><summary>Do you ship internationally?</summary><p>Not yet — we currently ship within the United States only.</p></details>
+    <details><summary>What if my package is delayed?</summary><p>Most orders arrive in 3–7 business days. If yours is late, contact us with your order number and we'll check with the carrier.</p></details>
+    <details><summary>Are there any hidden fees?</summary><p>No. You see the full price, shipping and any discount before you pay.</p></details>
+    <details><summary>Which payment methods do you accept?</summary><p>PayPal and major debit/credit cards through PayPal's secure checkout.</p></details></div>` },
+};
+$("#side").innerHTML = Object.entries(DOCS).map(([k, d]) => `<button data-k="${k}">${ICONS[d.i]}${d.t}</button>`).join("");
+function show(k) {
+  if (!DOCS[k]) k = "shipping";
+  const d = DOCS[k];
+  $("#doc").innerHTML = `<h2>${d.t}</h2>${d.html}<div class="help"><span>Still need help? <span class="email-txt">hello@arrowbaby.com</span></span><a class="btn sm" href="/about.html#contact">Contact us</a></div>`;
+  $$("#side button").forEach((b) => b.classList.toggle("on", b.dataset.k === k));
+  loadSettings().then((s) => s.contactEmail && $$(".email-txt").forEach((e) => (e.textContent = s.contactEmail)));
+}
+$$("#side button").forEach((b) => (b.onclick = () => { history.replaceState(null, "", "#" + b.dataset.k); show(b.dataset.k); }));
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+show(location.hash.slice(1));
+</script></body></html>

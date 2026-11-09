@@ -1,0 +1,8 @@
+{
+  "name": "arrow-store",
+  "version": "2.0.0",
+  "private": true,
+  "description": "ARROW baby accessories store + admin panel (static site + Vercel serverless functions)",
+  "scripts": { "dev": "node dev-server.js" },
+  "engines": { "node": ">=18" }
+}

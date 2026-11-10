@@ -33,15 +33,34 @@ async function redis(cmd) {
 }
 
 let seeded = false;
+// Bump when the shipped catalog must replace an older KV snapshot.
+// Version "2" = kids + home (22 products). Later admin edits are kept until the next bump.
+const CATALOG_VERSION = "2";
 async function ensureSeedKV() {
   if (seeded) return;
-  // SET NX only writes if the key does not exist yet -> seeding never overwrites your data.
   const s = readSeed();
-  const res = await redis(["SET", "products", JSON.stringify(s.products), "NX"]);
-  if (res === "OK") {
-    await redis(["SET", "settings", JSON.stringify(s.settings), "NX"]);
+  const ver = await redis(["GET", "catalogVersion"]);
+  if (ver !== CATALOG_VERSION) {
+    // Replace the previous baby/kids-only KV catalog. Do not touch existing orders.
+    await redis(["SET", "products", JSON.stringify(s.products)]);
+    const rawSet = await redis(["GET", "settings"]);
+    if (!rawSet) {
+      await redis(["SET", "settings", JSON.stringify(s.settings)]);
+    } else {
+      try {
+        const cur = JSON.parse(rawSet);
+        await redis(["SET", "settings", JSON.stringify({
+          ...cur,
+          announcement: s.settings.announcement,
+          slides: s.settings.slides,
+        })]);
+      } catch {
+        await redis(["SET", "settings", JSON.stringify(s.settings)]);
+      }
+    }
     await redis(["SET", "coupons", JSON.stringify(s.coupons), "NX"]);
     for (const o of s.orders || []) await redis(["HSETNX", "orders", o.id, JSON.stringify(o)]);
+    await redis(["SET", "catalogVersion", CATALOG_VERSION]);
   }
   seeded = true;
 }

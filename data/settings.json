@@ -4,8 +4,8 @@
  "slides": [
   {
    "image": "img/slides/slide1.jpg",
-   "headline": "Aim for little adventures",
-   "subtitle": "Simple, safe accessories for busy parents",
+   "headline": "Fun finds for kids & home",
+   "subtitle": "Curious little things worth adding to the cart",
    "buttonText": "Shop the Quiver",
    "buttonLink": "shop.html"
   },
@@ -18,10 +18,10 @@
   },
   {
    "image": "img/slides/slide3.jpg",
-   "headline": "The Diaper Caddy",
-   "subtitle": "Everything in reach, every change · $22.99",
+   "headline": "Play that actually teaches",
+   "subtitle": "Wooden Peg Board Montessori · $24.99",
    "buttonText": "Shop now",
-   "buttonLink": "product.html?id=diaper-caddy"
+   "buttonLink": "product.html?id=wooden-peg-board"
   }
  ]
 }

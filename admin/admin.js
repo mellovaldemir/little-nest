@@ -5,7 +5,18 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const money = (n) => "$" + Number(n || 0).toFixed(2);
 const img = (u) => (!u ? "" : /^(https?:|data:|\/)/.test(u) ? u : "/" + u);
 const fmtDate = (d) => new Date(d).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
-const CATS = { "on-the-go": "On the go", nursery: "Nursery", bath: "Bath time", safety: "Baby safety" };
+const CATS = {
+  "learn-play": "Learn & Play",
+  "room-bedtime": "Room & Bedtime",
+  "on-the-go": "On the Go",
+  "fidgets-teens": "Fidgets & Teens",
+  cleaning: "Cleaning",
+  kitchen: "Kitchen",
+  "desk-cable": "Desk & Cable",
+};
+const TAB_FOR = { "learn-play": "kids", "room-bedtime": "kids", "on-the-go": "kids", "fidgets-teens": "kids", cleaning: "home", kitchen: "home", "desk-cable": "home" };
+const TAB_LABEL = { kids: "Kids", home: "Home" };
+const CATS_GROUPED = `<optgroup label="Kids">${[["learn-play","Learn & Play"],["room-bedtime","Room & Bedtime"],["on-the-go","On the Go"],["fidgets-teens","Fidgets & Teens"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Home">${[["cleaning","Cleaning"],["kitchen","Kitchen"],["desk-cable","Desk & Cable"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup>`;
 const STATUS = { new: "New", sent_to_cj: "Sent to CJ", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled" };
 const MASCOT = "/img/brand/mascot.png";
 const I = {
@@ -118,16 +129,16 @@ async function viewProducts() {
     $("#ptable").innerHTML = list.map((p) => {
       const margin = p.price - (p.cost || 0);
       return `<tr><td>${p.images?.length ? `<img class="thumb" src="${esc(img(p.images[0]))}" alt="">` : `<img class="thumb" src="${MASCOT}" style="object-fit:contain;opacity:.5" alt="">`}</td>
-      <td><b>${esc(p.name)}</b>${p.example ? ' <span class="pill ex-pill">example</span>' : ""}<br><span class="muted">${CATS[p.category] || "-"}</span></td>
+      <td><b>${esc(p.name)}</b>${p.example ? ' <span class="pill ex-pill">example</span>' : ""}${p.priceEstimate ? ' <span class="pill ex-pill">est. price</span>' : ""}<br><span class="muted">${esc(TAB_LABEL[p.tab || TAB_FOR[p.category]] || "")} · ${CATS[p.category] || "-"}</span></td>
       <td class="right"><b>${money(p.price)}</b>${p.compareAt ? `<br><s class="muted">${money(p.compareAt)}</s>` : ""}</td>
-      <td class="right nw">${money(p.cost)}<br><span class="muted">margin ${money(margin)}</span></td>
-      <td class="nw">${p.cjSku ? `<span title="${esc(p.cjSku)}">✓ SKU</span>` : '<span class="muted">no SKU</span>'}</td>
+      <td class="right nw">${money(p.cost)}${p.shipCost ? ` + ${money(p.shipCost)} ship` : ""}<br><span class="muted">margin ${money(margin - (p.shipCost || 0))}</span></td>
+      <td class="nw">${p.supplier ? `<span title="${esc(p.supplierId || "")}">${esc(p.supplier)}</span>` : '<span class="muted">—</span>'}${p.supplierId ? `<br><span class="muted">${esc(p.supplierId).slice(0, 12)}…</span>` : ""}</td>
       <td><label class="tg"><span class="switch"><input type="checkbox" data-toggle="${esc(p.id)}" ${p.active ? "checked" : ""}><i></i></span><span class="pill ${p.active ? "on-pill" : "off-pill"}">${p.active ? "Active" : "Hidden"}</span></label></td>
       <td class="right" style="white-space:nowrap"><a class="btn sec sm" href="#product/${encodeURIComponent(p.id)}">Edit</a> <button class="btn danger sm" data-del="${esc(p.id)}">Delete</button></td></tr>`;
     }).join("") || '<tr><td colspan="7" class="empty">No products.</td></tr>';
   };
   v.innerHTML = `<div class="panel"><div class="row" style="justify-content:space-between;margin-bottom:8px"><input class="inp" id="pq" placeholder="Search products…" style="max-width:320px"><span class="muted"><b>${PRODUCTS.length}</b> products · <b>${PRODUCTS.filter((p) => p.active).length}</b> active</span></div>
-    <table><thead><tr><th></th><th>Product</th><th class="right">Price</th><th class="right">Cost</th><th>CJ</th><th>Status</th><th></th></tr></thead><tbody id="ptable"></tbody></table></div>`;
+    <table><thead><tr><th></th><th>Product</th><th class="right">Price</th><th class="right">Cost</th><th>Supplier</th><th>Status</th><th></th></tr></thead><tbody id="ptable"></tbody></table></div>`;
   draw();
   $("#pq").oninput = (e) => draw(e.target.value);
   v.addEventListener("change", async (e) => {
@@ -146,14 +157,14 @@ async function viewProducts() {
 async function viewProductEdit(id) {
   const isNew = id === "new";
   const v = shell("products", isNew ? "Add product" : "Edit product", '<a class="btn sec" href="#products">← Back to products</a>');
-  const p = isNew ? { name: "", price: "", compareAt: "", cost: "", category: "nursery", description: "", benefits: [], images: [], cjLink: "", cjSku: "", active: true, bestseller: false, isNew: true, example: false }
+  const p = isNew ? { name: "", price: "", compareAt: "", cost: "", shipCost: "", category: "learn-play", tab: "kids", description: "", benefits: [], images: [], supplier: "QKsource", supplierId: "", supplierUrl: "", cjLink: "", cjSku: "", priceEstimate: true, active: true, bestseller: false, isNew: true, example: false }
     : await api("GET", "/api/products?id=" + encodeURIComponent(id));
   let images = [...(p.images || [])];
   const sw = (k, label) => `<label class="tg"><span class="switch"><input type="checkbox" name="${k}" ${p[k] ? "checked" : ""}><i></i></span>${label}</label>`;
   v.innerHTML = `<form id="pf"><div class="two"><div>
     <div class="panel"><h2>Product details</h2><div class="form-grid">
       <label class="f full">Name<input name="name" value="${esc(p.name)}" required maxlength="120"></label>
-      <label class="f">Category<select name="category">${Object.entries(CATS).map(([k, l]) => `<option value="${k}" ${p.category === k ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+      <label class="f">Section &amp; category<select name="category">${CATS_GROUPED.replace(`value="${p.category}"`, `value="${p.category}" selected`)}</select></label>
       <label class="f">Sort order<input name="sort" type="number" value="${esc(p.sort ?? "")}" placeholder="1 = first"></label>
       <label class="f full">Description<textarea name="description" rows="5">${esc(p.description)}</textarea></label>
       <label class="f full">Highlights <span class="hint">one per line — shown as bullet points</span><textarea name="benefits" rows="4">${esc((p.benefits || []).join("\n"))}</textarea></label>
@@ -166,13 +177,17 @@ async function viewProductEdit(id) {
     <div class="panel"><h2>Pricing</h2><div class="form-grid">
       <label class="f">Price (USD)<input name="price" type="number" step="0.01" min="0" value="${esc(p.price)}" required></label>
       <label class="f">Compare-at price <span class="hint">shows “Sale”</span><input name="compareAt" type="number" step="0.01" min="0" value="${esc(p.compareAt ?? "")}" placeholder="optional"></label>
-      <label class="f full">Product cost (CJ price) <span class="hint">used for profit — never shown to customers</span><input name="cost" type="number" step="0.01" min="0" value="${esc(p.cost ?? "")}"></label>
+      <label class="f">Product cost (USD) <span class="hint">supplier price — never shown to customers</span><input name="cost" type="number" step="0.01" min="0" value="${esc(p.cost ?? "")}"></label>
+      <label class="f">Extra shipping cost <span class="hint">0 if free US shipping</span><input name="shipCost" type="number" step="0.01" min="0" value="${esc(p.shipCost ?? 0)}"></label>
       <div class="margin full" id="margin"></div></div></div>
-    <div class="panel"><h2>CJ Dropshipping</h2><div class="form-grid">
-      <label class="f full">CJ product link<input name="cjLink" value="${esc(p.cjLink)}" placeholder="https://cjdropshipping.com/product/…"></label>
-      <label class="f full">CJ SKU / variant ID (vid)<input name="cjSku" value="${esc(p.cjSku)}" placeholder="e.g. 1234567890-ABC"></label></div></div>
+    <div class="panel"><h2>Supplier</h2><div class="form-grid">
+      <label class="f">Supplier<select name="supplier">${["QKsource","CJ"].map((x) => `<option ${p.supplier === x ? "selected" : ""}>${x}</option>`).join("")}</select></label>
+      <label class="f">Supplier product ID<input name="supplierId" value="${esc(p.supplierId || "")}" placeholder="1896…"></label>
+      <label class="f full">Supplier URL<input name="supplierUrl" value="${esc(p.supplierUrl || "")}" placeholder="https://qksource.com/product/x-p-….html"></label>
+      <label class="f full">CJ product link <span class="hint">optional, if you order via CJ</span><input name="cjLink" value="${esc(p.cjLink || "")}" placeholder="https://cjdropshipping.com/product/…"></label>
+      <label class="f full">CJ SKU / variant ID (vid)<input name="cjSku" value="${esc(p.cjSku || "")}" placeholder="e.g. 1234567890-ABC"></label></div></div>
     <div class="panel"><h2>Visibility</h2><div class="toggles" style="flex-direction:column;gap:12px">
-      ${sw("active", "Active (visible in store)")}${sw("bestseller", "Show in Bestsellers")}${sw("isNew", "Show in New arrivals")}${sw("example", "Mark as example product")}</div></div>
+      ${sw("active", "Active (visible in store)")}${sw("bestseller", "Show in Bestsellers")}${sw("isNew", "Show in New arrivals")}${sw("priceEstimate", "Retail price is an estimate")}${sw("example", "Mark as example product")}</div></div>
     <div class="row" style="justify-content:flex-end"><a class="btn sec" href="#products">Cancel</a><button class="btn" id="saveBtn">${isNew ? "Create product" : "Save changes"}</button></div>
   </div></div></form>`;
   const f = $("#pf");
@@ -182,11 +197,11 @@ async function viewProductEdit(id) {
       + `<label class="upload" for="file">＋<br>Upload<br>photos</label>`;
   };
   const drawMargin = () => {
-    const pr = +f.price.value || 0, c = +f.cost.value || 0;
-    $("#margin").innerHTML = `Margin per sale: <b>${money(pr - c)}</b> ${pr ? `(${Math.round(((pr - c) / pr) * 100)}%)` : ""}`;
+    const pr = +f.price.value || 0, c = +f.cost.value || 0, sh = +f.shipCost.value || 0;
+    $("#margin").innerHTML = `Margin per sale: <b>${money(pr - c - sh)}</b> ${pr ? `(${Math.round(((pr - c - sh) / pr) * 100)}%)` : ""} <span class="hint">(price − cost − extra shipping)</span>`;
   };
   drawImgs(); drawMargin();
-  f.price.oninput = f.cost.oninput = drawMargin;
+  f.price.oninput = f.cost.oninput = f.shipCost.oninput = drawMargin;
   $("#imgs").onclick = (e) => {
     const r = e.target.dataset.rmimg, m = e.target.dataset.main;
     if (r !== undefined) { images.splice(+r, 1); drawImgs(); }
@@ -203,7 +218,8 @@ async function viewProductEdit(id) {
   f.onsubmit = async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(f));
-    for (const k of ["active", "bestseller", "isNew", "example"]) data[k] = f[k].checked;
+    for (const k of ["active", "bestseller", "isNew", "example", "priceEstimate"]) data[k] = f[k].checked;
+    data.tab = TAB_FOR[data.category] || "kids";
     data.images = images; data.benefits = data.benefits.split("\n");
     $("#saveBtn").disabled = true;
     try {

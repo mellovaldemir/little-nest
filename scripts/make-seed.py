@@ -1,48 +1,224 @@
+#!/usr/bin/env python3
+"""Rebuild products.json, settings.json and api/_lib/seed.json for the kids + home catalog.
+
+Retail prices are estimates: about 2–2.5× landed cost (supplier cost + extra shipping),
+rounded to end in .99. Each product has priceEstimate: true.
+"""
 import json
-P=[]
-def add(id,name,price,cat,cost,desc,benefits,images=None,compare=None,best=False,new=False,example=False,sort=0):
-    P.append(dict(id=id,name=name,price=price,compareAt=compare,cost=cost,category=cat,description=desc,benefits=benefits,
-      images=images or [],cjLink="",cjSku="",active=True,bestseller=best,isNew=new,example=example,sort=sort))
-add("diaper-caddy","Felt Diaper Caddy",22.99,"nursery",9.50,
- "Diaper changes go smoother when everything is in reach. Our Felt Diaper Caddy organizes diapers, wipes, lotions and small essentials in a soft, neutral basket that looks at home on a changing table, dresser, or car seat. Approx. 15 × 9 × 7 in. Spot clean only.",
- ["Keeps diapers, wipes and creams in one portable spot","Removable dividers — customize the compartments","Soft, sturdy felt that holds its shape","Carry handle for easy room-to-room changes"],
- ["img/diaper-caddy.jpg","img/hero.jpg"],compare=29.99,best=True,sort=1)
-add("stroller-organizer","Stroller Organizer with Cup Holders",21.99,"on-the-go",8.20,
- "Keep your phone, keys, snacks and two drinks right at the handlebar. Fits most strollers with adjustable straps and folds flat when you don't need it.",
- ["Two insulated cup holders","Zip pocket for phone and keys","Universal adjustable straps","Folds flat with the stroller"],["img/stroller-organizer.jpg"],best=True,sort=2)
-add("stroller-fan","Clip-on Stroller Fan",19.99,"on-the-go",6.90,
- "A quiet, rechargeable fan with a flexible clip that grips stroller frames, car seats and crib rails. Keeps little ones cool on warm days.",
- ["Quiet 3-speed motor","Flexible clip with 360° rotation","USB rechargeable","Finger-safe grille"],["img/stroller-fan.jpg"],best=True,sort=3)
-add("baby-proofing-kit","Baby Proofing Kit",14.99,"safety",4.80,
- "Everything you need to start baby-proofing in one box: outlet covers, corner guards and cabinet latches. No drilling needed.",
- ["Outlet covers, corner guards and cabinet latches","Adhesive install — no tools","Clear finish blends with furniture","Easy for adults to remove"],["img/baby-proofing-kit.jpg"],best=True,sort=4)
-ex="EXAMPLE PRODUCT — replace photo, text, price and cost with the real CJ item before selling. "
-add("potty-seat-step","Potty Training Seat with Step Ladder",34.99,"bath",14.00,ex+"Foldable potty seat with a non-slip step ladder that fits most standard toilets.",["Non-slip steps","Soft padded seat","Folds for storage"],compare=45.00,best=True,example=True,sort=5)
-add("stroller-cup-holder","Stroller Cup & Phone Holder",16.99,"on-the-go",5.50,ex+"Clamp-on holder for a drink and a phone, adjustable for most stroller bars.",["Fits most stroller bars","Holds cups and bottles","Phone slot"],best=True,example=True,sort=6)
-add("tummy-time-mat","LED Tummy Time Water Mat",19.99,"nursery",6.00,ex+"Inflatable water play mat with floating sea friends for tummy time.",["Leak-resistant","Floating sea friends","Easy to inflate"],best=True,example=True,sort=7)
-add("gift-crate","Wooden Baby Gift Crate",39.99,"nursery",15.00,ex+"Natural wood crate for storing toys, blankets or putting together a baby shower gift.",["Natural pine wood","Rounded edges","Great for gifts"],compare=50.00,best=True,example=True,sort=8)
-add("baby-carrier","Ergonomic Baby Carrier",45.99,"on-the-go",19.00,ex+"Padded carrier with lumbar support for front carrying.",["Lumbar support","Padded straps","Breathable fabric"],new=True,example=True,sort=9)
-add("muslin-swaddle","Organic Muslin Swaddle",24.99,"nursery",7.50,ex+"Soft, breathable organic cotton muslin swaddle blanket.",["Organic cotton","Breathable","Gets softer with every wash"],new=True,example=True,sort=10)
-add("teething-ring","Wooden Teething Ring",12.99,"nursery",3.20,ex+"Smooth wooden teething ring with a soft silicone charm.",["Natural wood","Food-grade silicone","Easy to grip"],new=True,example=True,sort=11)
-add("insulated-bottle","Insulated Baby Bottle",18.99,"on-the-go",6.80,ex+"Keeps milk warm or cool on the go.",["Double-wall insulation","Leak-proof lid","BPA-free"],new=True,example=True,sort=12)
-add("bath-duck","Yellow Bath Duck",8.99,"bath",1.90,ex+"Classic squeaky bath duck for bath-time fun.",["Soft and squeezable","Floats upright"],example=True,sort=13)
-add("outlet-covers","Outlet Covers (24-pack)",9.99,"safety",2.40,ex+"Clear plug-in outlet covers to keep little fingers safe.",["24 covers","Easy for adults to remove"],compare=12.99,example=True,sort=14)
-settings={"announcement":"Free US shipping on orders over $35","contactEmail":"hello@arrowbaby.com",
- "slides":[
-  {"image":"img/slides/slide1.jpg","headline":"Aim for little adventures","subtitle":"Simple, safe accessories for busy parents","buttonText":"Shop the Quiver","buttonLink":"shop.html"},
-  {"image":"img/slides/slide2.jpg","headline":"Free shipping over $35","subtitle":"Fast delivery from US warehouses","buttonText":"Start shopping","buttonLink":"shop.html"},
-  {"image":"img/slides/slide3.jpg","headline":"The Diaper Caddy","subtitle":"Everything in reach, every change · $22.99","buttonText":"Shop now","buttonLink":"product.html?id=diaper-caddy"}]}
-coupons=[{"code":"WELCOME10","type":"percent","value":10,"minSubtotal":0,"active":True,"createdAt":"2026-11-09T12:00:00.000Z"},
- {"code":"BUNDLE15","type":"percent","value":15,"minSubtotal":50,"active":True,"createdAt":"2026-11-09T12:00:00.000Z"}]
-orders=[{"id":"AR-SAMPLE1","sample":True,"createdAt":"2026-11-08T15:20:00.000Z","status":"new","paypalOrderId":"SAMPLE-NOT-REAL",
- "customer":{"name":"Sample Customer (test data)","email":"sample@example.com"},
- "address":{"address_line_1":"123 Example St","admin_area_2":"Austin","admin_area_1":"TX","postal_code":"73301","country_code":"US"},
- "items":[{"id":"diaper-caddy","name":"Felt Diaper Caddy","price":22.99,"cost":9.5,"qty":1,"cjSku":"","cjLink":""},
-          {"id":"stroller-fan","name":"Clip-on Stroller Fan","price":19.99,"cost":6.9,"qty":1,"cjSku":"","cjLink":""}],
- "subtotal":42.98,"discount":0,"coupon":None,"shipping":0,"total":42.98,"history":[{"at":"2026-11-08T15:20:00.000Z","status":"new"}]}]
-json.dump({"products":P,"settings":settings,"coupons":coupons,"orders":orders},open('../api/_lib/seed.json','w'),indent=1,ensure_ascii=False)
-# static fallback for the storefront (public fields only)
-pub=[{k:v for k,v in p.items() if k not in("cost","cjLink","cjSku")} for p in P]
-json.dump(pub,open('../data/products.json','w'),indent=1,ensure_ascii=False)
-json.dump(settings,open('../data/settings.json','w'),indent=1,ensure_ascii=False)
-print(len(P))
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+P = []
+
+
+def url(supplier, sid):
+    host = "cjdropshipping.com" if supplier == "CJ" else "qksource.com"
+    return f"https://{host}/product/x-p-{sid}.html"
+
+
+def add(**kw):
+    supplier = kw["supplier"]
+    sid = kw["supplierId"]
+    ship = float(kw.get("shipCost") or 0)
+    p = {
+        "id": kw["id"],
+        "name": kw["name"],
+        "price": kw["price"],
+        "compareAt": kw.get("compareAt"),
+        "cost": kw["cost"],
+        "shipCost": ship,
+        "priceEstimate": True,
+        "tab": kw["tab"],
+        "category": kw["category"],
+        "description": kw["description"],
+        "benefits": kw["benefits"],
+        "images": kw.get("images") or [f"img/products/{kw['id']}.jpg"],
+        "supplier": supplier,
+        "supplierId": sid,
+        "supplierUrl": url(supplier, sid),
+        "cjLink": url(supplier, sid) if supplier == "CJ" else "",
+        "cjSku": "",
+        "active": True,
+        "bestseller": kw.get("best", False),
+        "isNew": kw.get("new", False),
+        "example": False,
+        "sort": kw["sort"],
+    }
+    P.append(p)
+
+
+# ---- Kids · Learn & Play ----
+add(id="wooden-peg-board", name="Wooden Peg Board Montessori", price=24.99, cost=10.00,
+    tab="kids", category="learn-play", sort=1, best=True,
+    supplier="QKsource", supplierId="1896473974832295938",
+    description="A colorful wooden peg board with beads that slide along the wires. Kids practice colors, counting and fine motor skills at the table — no screens, no batteries.",
+    benefits=["Wooden Montessori-style peg board", "Helps with colors, counting and coordination", "Ships from a US warehouse", "Free US shipping"])
+
+add(id="baby-learning-tablet", name="Baby Learning Tablet", price=34.99, cost=15.04,
+    tab="kids", category="learn-play", sort=2, best=True,
+    supplier="QKsource", supplierId="1939541791168036865",
+    description="A kid-sized learning tablet that introduces letters, numbers and simple words with lights and sounds. Built for little hands and curious toddlers.",
+    benefits=["ABC and number activities", "Lights and sounds keep kids engaged", "Sized for small hands", "Free US shipping"])
+
+add(id="educational-toys-3-7", name="Educational Learning Toys (Ages 3–7)", price=22.99, cost=9.82,
+    tab="kids", category="learn-play", sort=3, best=True,
+    supplier="QKsource", supplierId="1955904529399447554",
+    description="A set of hands-on learning toys for preschool and early elementary kids. Mix of matching, sorting and early-thinking games to pull out on a rainy afternoon.",
+    benefits=["Made for ages 3–7", "Sorting and matching play", "Great desk or travel activity", "Free US shipping"])
+
+add(id="educational-toys-2-7", name="Educational Learning Toys (Ages 2–7)", price=24.99, cost=10.28,
+    tab="kids", category="learn-play", sort=4,
+    supplier="QKsource", supplierId="1955550794640093185",
+    description="An early-learning toy set that grows with your child from toddler to early school age. Simple pieces, bright colors and plenty to explore.",
+    benefits=["For ages 2–7", "Bright, easy-to-grasp pieces", "Encourages independent play", "Free US shipping"])
+
+add(id="logical-road-builder", name="Kids Logical Road Builder", price=74.99, cost=35.03,
+    tab="kids", category="learn-play", sort=5,
+    supplier="QKsource", supplierId="1967474941410299906",
+    description="A STEM puzzle that lets kids build roads, plan routes and watch their ideas click into place. A longer-lasting project for puzzle lovers.",
+    benefits=["STEM road-building puzzle", "Builds planning and logic skills", "Satisfying click-together pieces", "Free US shipping"])
+
+add(id="talking-flash-cards", name="Talking Flash Cards (448 Words)", price=22.99, cost=9.90,
+    tab="kids", category="learn-play", sort=6, best=True,
+    supplier="QKsource", supplierId="1965710467457343490",
+    description="Talking flash cards with 448 sight words and pictures. Kids hear the word as they see it — a simple way to practice reading and vocabulary.",
+    benefits=["448 sight words", "Hear-and-see learning", "Compact for travel or the sofa", "Free US shipping"])
+
+add(id="role-play-set", name="32-Piece Role Play Set", price=99.99, cost=48.99,
+    tab="kids", category="learn-play", sort=7, new=True,
+    supplier="QKsource", supplierId="2102810505147285506",
+    description="A 32-piece dress-up and pretend-play set for kids who love to act out jobs, stories and everyday adventures. Plenty of pieces to share.",
+    benefits=["32-piece pretend-play set", "Encourages imagination and sharing", "Fun for siblings or playdates", "Free US shipping"])
+
+add(id="microscope-science-toy", name="Microscope Science Toy", price=49.99, cost=22.35,
+    tab="kids", category="learn-play", sort=8, best=True,
+    supplier="CJ", supplierId="1879356539223822337",
+    description="A kid-friendly microscope that turns leaves, fabric and kitchen spices into a science moment. A curious gift for the child who asks “why?” a lot.",
+    benefits=["Real close-up viewing for kids", "Easy intro to science at home", "Gift-ready for curious minds", "Free US shipping"])
+
+# ---- Kids · Room & Bedtime ----
+add(id="bunny-night-light", name="Bunny Night Light", price=36.99, cost=16.00,
+    tab="kids", category="room-bedtime", sort=9,
+    supplier="QKsource", supplierId="1989234503601668097",
+    description="A soft bunny night light that glows gently at bedtime. Cute enough to sit on a nightstand and calm enough for a dark room.",
+    benefits=["Gentle glow for bedtime", "Sweet bunny design", "Sits on a nightstand or shelf", "Free US shipping"])
+
+add(id="calf-alarm-clock", name="Calf Alarm Clock for Kids", price=24.99, cost=10.59,
+    tab="kids", category="room-bedtime", sort=10,
+    supplier="CJ", supplierId="1860255223420702720",
+    description="A cheerful calf-shaped alarm clock that makes getting up a little more fun. Easy to read and sized for a kid’s bedside table.",
+    benefits=["Kid-friendly calf design", "Simple bedside alarm", "A sweet room accent", "Free US shipping"])
+
+# ---- Kids · On the Go ----
+add(id="astronaut-water-bottle", name="Astronaut Water Bottle", price=29.99, cost=14.00,
+    tab="kids", category="on-the-go", sort=11,
+    supplier="QKsource", supplierId="1985589224236560385",
+    description="A white astronaut-themed water bottle that makes drinking water feel like a mission. Fun for school bags, parks and car rides.",
+    benefits=["Playful astronaut design", "Everyday kids’ water bottle", "Easy to toss in a backpack", "Free US shipping"])
+
+add(id="steel-kids-bottle", name="12oz Stainless Steel Kids Bottle", price=39.99, cost=17.84,
+    tab="kids", category="on-the-go", sort=12,
+    supplier="QKsource", supplierId="2044698223284813826",
+    description="A 12oz stainless steel bottle sized for kids. Tough enough for lunchboxes and everyday spills, without feeling oversized.",
+    benefits=["12oz stainless steel", "Kid-sized for small hands", "Everyday school and park bottle", "Free US shipping"])
+
+add(id="snowball-tool-kit", name="15-Piece Winter Snowball Tool Kit", price=79.99, cost=36.93,
+    tab="kids", category="on-the-go", sort=13,
+    supplier="QKsource", supplierId="1957723247874834433",
+    description="A 15-piece snowball tool kit for building, scooping and friendly snowball play. The kind of winter find that makes everyone want to go outside.",
+    benefits=["15-piece winter play kit", "Scoop, stack and launch snowballs", "Outdoor family fun", "Free US shipping"])
+
+add(id="trampoline-sprinkler", name="Kids Trampoline Sprinkler", price=39.99, cost=18.13,
+    tab="kids", category="on-the-go", sort=14,
+    supplier="QKsource", supplierId="2045053070108311553",
+    description="A sprinkler that clips onto a trampoline so jump time becomes a backyard splash session. Simple summer fun for hot days.",
+    benefits=["Turns a trampoline into a splash zone", "Easy attach-and-play setup", "Backyard summer favorite", "Free US shipping"])
+
+# ---- Kids · Fidgets & Teens ----
+add(id="fidget-balls-9pc", name="9-Piece 3D Printed Fidget Balls", price=17.99, cost=3.99, shipCost=4.00,
+    tab="kids", category="fidgets-teens", sort=15, new=True,
+    supplier="QKsource", supplierId="2091767723920121858",
+    description="A set of nine colorful 3D-printed fidget balls with stretchy bands. Push, pull and pass them around — a pocket-friendly stress toy for teens and desks.",
+    benefits=["9 colorful fidget balls", "Push-and-pull sensory play", "Handy for desks, cars and backpacks", "Ships from the US"])
+
+add(id="glow-fidget-ball", name="Glow-in-the-Dark Press Fidget Ball (12+)", price=15.99, cost=6.99,
+    tab="kids", category="fidgets-teens", sort=16, new=True,
+    supplier="QKsource", supplierId="2092878797670481921",
+    description="A compact press fidget ball that glows in the dark. Made for ages 12 and up — a quiet, pocket-size fidget for travel, homework and late-night car rides.",
+    benefits=["Glow-in-the-dark finish", "For teens and adults (ages 12+)", "Quiet, pocket-size fidget", "Free US shipping"])
+
+add(id="bicycle-chain-fidgets", name="8-Piece Bicycle-Chain Fidget Set", price=17.99, cost=7.81,
+    tab="kids", category="fidgets-teens", sort=17, new=True,
+    supplier="QKsource", supplierId="1869276080876965888",
+    description="Eight bicycle-chain style fidgets that spin, twist and click. A satisfying little set for teens who like something to do with their hands.",
+    benefits=["8 fidget toys in one set", "Spin, twist and click", "Great desk or backpack extras", "Free US shipping"])
+
+# ---- Home · Cleaning ----
+add(id="crevice-cleaning-brushes", name="3-Piece Crevice Cleaning Brush Set", price=19.99, cost=8.90,
+    tab="home", category="cleaning", sort=18,
+    supplier="QKsource", supplierId="2003357435441360897",
+    description="Three hard-bristle brushes made for the gaps you always skip: window tracks, bathroom edges and tight kitchen corners. Simple, oddly satisfying cleaning.",
+    benefits=["3 brushes for tight gaps", "Window tracks, sinks and tiles", "Hard bristles that reach in", "Free US shipping"])
+
+# ---- Home · Kitchen ----
+add(id="kitchen-sink-caddy", name="Kitchen Sink Caddy & Sponge Holder", price=34.99, cost=15.12,
+    tab="home", category="kitchen", sort=19,
+    supplier="QKsource", supplierId="1956541096810119170",
+    description="A sink-side caddy that keeps the sponge, brush and soap from taking over the counter. One little organizer that makes the sink look instantly calmer.",
+    benefits=["Holds sponge and sink tools", "Keeps the counter clearer", "Everyday kitchen organizer", "Free US shipping"])
+
+# ---- Home · Desk & Cable ----
+add(id="magnetic-cable-clips", name="Magnetic Cable Clips (6-Pack)", price=26.99, cost=12.21,
+    tab="home", category="desk-cable", sort=20, best=True,
+    supplier="QKsource", supplierId="1965621056973606913",
+    description="Six magnetic clips that grab charging cables and keep them from sliding off the nightstand, desk or car console. The small fix you notice every day.",
+    benefits=["6 magnetic clips", "Stick-on holder for desks, walls and cars", "Stops cables from disappearing", "Free US shipping"])
+
+add(id="ice-cream-pen-holder", name="Melting Ice-Cream Pen Holder", price=14.99, cost=2.60, shipCost=4.00,
+    tab="home", category="desk-cable", sort=21, new=True,
+    supplier="QKsource", supplierId="2094997253084516353",
+    description="A 3D-printed pen holder that looks like a melting ice-cream cone. A tiny desk surprise that actually holds pens and pencils.",
+    benefits=["Melting ice-cream design", "Holds pens and pencils", "Fun desk accent", "Ships from the US"])
+
+add(id="cat-phone-holder", name="Cat Phone Holder", price=19.99, cost=4.80, shipCost=4.00,
+    tab="home", category="desk-cable", sort=22, new=True,
+    supplier="QKsource", supplierId="2103067398688845825",
+    description="A cute 3D-printed cat that holds your phone on the desk while you watch a recipe, a show or a video call. Functional and a little ridiculous — in a good way.",
+    benefits=["Cat-shaped phone stand", "Keeps a phone upright on the desk", "Small, giftable desk decor", "Ships from the US"])
+
+
+settings = {
+    "announcement": "Free US shipping on orders over $35",
+    "contactEmail": "hello@arrowbaby.com",
+    "slides": [
+        {"image": "img/slides/slide1.jpg", "headline": "Fun finds for kids & home", "subtitle": "Curious little things worth adding to the cart", "buttonText": "Shop the Quiver", "buttonLink": "shop.html"},
+        {"image": "img/slides/slide2.jpg", "headline": "Free shipping over $35", "subtitle": "Fast delivery from US warehouses", "buttonText": "Start shopping", "buttonLink": "shop.html"},
+        {"image": "img/slides/slide3.jpg", "headline": "Play that actually teaches", "subtitle": "Wooden Peg Board Montessori · $24.99", "buttonText": "Shop now", "buttonLink": "product.html?id=wooden-peg-board"},
+    ],
+}
+coupons = [
+    {"code": "WELCOME10", "type": "percent", "value": 10, "minSubtotal": 0, "active": True, "createdAt": "2026-11-09T12:00:00.000Z"},
+    {"code": "BUNDLE15", "type": "percent", "value": 15, "minSubtotal": 50, "active": True, "createdAt": "2026-11-09T12:00:00.000Z"},
+]
+orders = [{
+    "id": "AR-SAMPLE1", "sample": True, "createdAt": "2026-11-08T15:20:00.000Z", "status": "new",
+    "paypalOrderId": "SAMPLE-NOT-REAL",
+    "customer": {"name": "Sample Customer (test data)", "email": "sample@example.com"},
+    "address": {"address_line_1": "123 Example St", "admin_area_2": "Austin", "admin_area_1": "TX", "postal_code": "73301", "country_code": "US"},
+    "items": [
+        {"id": "wooden-peg-board", "name": "Wooden Peg Board Montessori", "price": 24.99, "cost": 10.00, "qty": 1, "cjSku": "", "cjLink": ""},
+        {"id": "magnetic-cable-clips", "name": "Magnetic Cable Clips (6-Pack)", "price": 26.99, "cost": 12.21, "qty": 1, "cjSku": "", "cjLink": ""},
+    ],
+    "subtotal": 51.98, "discount": 0, "coupon": None, "shipping": 0, "total": 51.98,
+    "history": [{"at": "2026-11-08T15:20:00.000Z", "status": "new"}],
+}]
+
+(ROOT / "api/_lib/seed.json").write_text(json.dumps({"products": P, "settings": settings, "coupons": coupons, "orders": orders}, indent=1, ensure_ascii=False) + "\n")
+(ROOT / "data/products.json").write_text(json.dumps(P, indent=1, ensure_ascii=False) + "\n")
+(ROOT / "data/settings.json").write_text(json.dumps(settings, indent=1, ensure_ascii=False) + "\n")
+
+print(f"Wrote {len(P)} products")
+for p in P:
+    landed = round(p["cost"] + p["shipCost"], 2)
+    mult = round(p["price"] / landed, 2) if landed else 0
+    print(f"  {p['id']:28} ${p['price']:<6}  landed ${landed:<6}  {mult}x  {p['tab']}/{p['category']}")

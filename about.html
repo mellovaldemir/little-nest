@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Our story | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<title>Our story | ARROW</title><meta name="description" content="ARROW — fun finds for kids and home. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
 <link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <div id="site-header"></div>
-<section class="pagehero tall"><div class="wrap"><h1 style="font-size:3.4rem">Our story</h1><p>Made by parents,<br>for little adventurers</p></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
+<section class="pagehero tall"><div class="wrap"><h1 style="font-size:3.4rem">Our story</h1><p>Fun finds<br>for kids &amp; home</p></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
 <!-- PLACEHOLDER COPY: adjust the story text to your own words. -->
 <div class="wrap story">
   <img src="/img/hero.jpg" alt="A calm, organized nursery">
-  <p>We started <b>ARROW</b> because we wanted better for our babies: simple, safe accessories designed by parents who understand the joy (and the chaos) of little adventures — at home, on walks, and everywhere in between.</p>
+  <p>We started <b>ARROW</b> because we love simple things that spark a little curiosity — toys and everyday finds for kids, plus small home helpers that make you want to click “add.” Ships from US warehouses to families across the country.</p>
 </div>
 <section class="wrap"><div class="sec-head" style="justify-content:center"><h2>What we aim for</h2></div>
   <div class="values" id="values"></div></section>
@@ -29,8 +29,8 @@
 <script>
 renderChrome("about");
 $("#values").innerHTML = [["shield", "Safe & simple", "Thoughtful materials and easy-to-use designs, with nothing you don't need."],
-  ["heart", "Parent-tested", "We pick products that make everyday routines with a baby a little easier."],
-  ["clock", "Made to last", "Sturdy accessories that keep up with naps, walks and road trips."]]
+  ["heart", "Picked with care", "We look for simple, useful things kids and families actually want to use."],
+  ["clock", "Ships from the US", "Most items ship from US warehouses in about 3–7 business days."]]
   .map(([i, h, p]) => `<div class="value"><div class="ic">${ICONS[i]}</div><div><h3>${h}</h3><p>${p}</p></div></div>`).join("");
 $("#clockIco").innerHTML = ICONS.clock + " We reply within 24 hours (Mon–Fri)";
 const setMail = (e) => ($("#mailIco").innerHTML = ICONS.mail + ` <a href="mailto:${esc(e)}">${esc(e)}</a>`);

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Simple, safe accessories for busy parents | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<title>Fun finds for kids &amp; home | ARROW</title><meta name="description" content="ARROW — fun finds for kids and home. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
 <link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <div id="site-header"></div>
 <section class="carousel" id="hero" aria-roledescription="carousel">
@@ -10,11 +10,15 @@
 <svg class="wave" viewBox="0 0 1200 22" preserveAspectRatio="none"><path d="M0 22V10c40 0 40-10 80-10s40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10V22z" fill="#faf5ea"/></svg>
 
 <nav class="chips m-only" aria-label="Shop by category">
-  <a href="/shop.html?view=sale" class="hot">🔥 Sale</a><a href="/shop.html?view=new">✨ New</a><a href="/shop.html?cat=on-the-go">On the go</a><a href="/shop.html?cat=nursery">Nursery</a><a href="/shop.html?cat=bath">Bath time</a><a href="/shop.html?cat=safety">Baby safety</a>
+  <a href="/shop.html?tab=kids">Kids</a><a href="/shop.html?tab=home">Home</a><a href="/shop.html?view=new">✨ New</a><a href="/shop.html?cat=learn-play">Learn &amp; Play</a><a href="/shop.html?cat=fidgets-teens">Fidgets</a><a href="/shop.html?cat=cleaning">Cleaning</a><a href="/shop.html?cat=desk-cable">Desk &amp; Cable</a>
 </nav>
+<section class="block trend"><div class="wrap">
+  <div class="sec-head"><h2>Trending curiosities</h2><a href="/shop.html?view=bestsellers">Shop bestsellers →</a></div>
+  <div class="trend-grid" id="trend"></div>
+</div></section>
 <section class="block"><div class="wrap">
-  <div class="sec-head"><h2>Bestsellers</h2><a href="/shop.html?view=bestsellers">View all →</a></div>
-  <div class="grid" id="best"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+  <div id="homeTabs"></div>
+  <div id="tabbed"><div class="skeleton"></div></div>
 </div></section>
 
 <section class="bundle"><div class="wrap">
@@ -22,43 +26,15 @@
   <img class="mascot" src="/img/brand/mascot.png" alt="ARROW mascot">
 </div></section>
 
-<section class="block"><div class="wrap">
-  <div class="sec-head" style="justify-content:center"><h2>Shop by category</h2></div>
-  <div class="cats">
-    <a class="cat" href="/shop.html?cat=on-the-go"><div class="circ"><img src="/img/stroller-organizer.jpg" alt=""></div>On the go</a>
-    <a class="cat" href="/shop.html?cat=nursery"><div class="circ"><img src="/img/diaper-caddy.jpg" alt=""></div>Nursery</a>
-    <a class="cat" href="/shop.html?cat=bath"><div class="circ" id="bathIcon"></div>Bath time</a>
-    <a class="cat" href="/shop.html?cat=safety"><div class="circ"><img src="/img/baby-proofing-kit.jpg" alt=""></div>Baby safety</a>
-  </div>
-</div></section>
-
-<section class="block" style="padding-top:10px"><div class="wrap">
-  <div class="sec-head"><h2>New arrivals</h2><a href="/shop.html?view=new">View all →</a></div>
-  <div class="grid" id="newgrid"></div>
-</div></section>
-
 <section class="trust"><div class="wrap" id="trust"></div></section>
-
-<section class="block"><div class="wrap">
-  <div class="sec-head" style="justify-content:center"><h2>What parents say</h2></div>
-  <!-- PLACEHOLDER REVIEWS: sample text for the layout only. Replace with real customer reviews before launch
-       (showing invented reviews to customers is not allowed). -->
-  <div class="reviews">
-    <div class="review"><div class="stars">★★★★★</div><p>“The diaper caddy keeps everything in one place. Night changes are so much easier now.”</p><small>Sample review · placeholder</small></div>
-    <div class="review"><div class="stars">★★★★★</div><p>“The stroller organizer fits our stroller perfectly and holds both of our coffees.”</p><small>Sample review · placeholder</small></div>
-    <div class="review"><div class="stars">★★★★★</div><p>“Cute, practical and arrived quickly. Great gift for new parents.”</p><small>Sample review · placeholder</small></div>
-  </div>
-  <p class="ph-note">Reviews above are layout placeholders — real customer reviews will appear here.</p>
-</div></section>
 
 <div id="site-footer"></div>
 <script src="/js/store.js"></script>
 <script>
 renderChrome("home");
-$("#bathIcon").innerHTML = ICONS.duck;
 $("#trust").innerHTML = [
   ["lock","Secure PayPal checkout","Pay with PayPal or card"],["ret","30-day returns","Easy, no-fuss returns"],
-  ["heart","Made for parents","Simple, practical designs"],["truck","Fast US delivery","Free over $35"]]
+  ["heart","Fun finds for kids & home","Curious, practical picks"],["truck","Fast US delivery","Free over $35"]]
   .map(([i,b,s]) => `<div class="t">${ICONS[i]}<div><b>${b}</b><span>${s}</span></div></div>`).join("");
 
 // ----- carousel (slides come from the admin panel → Banners) -----
@@ -80,8 +56,16 @@ $("#trust").innerHTML = [
   go(0); if (slides.length > 1) auto();
 })();
 
+const startTab = new URLSearchParams(location.search).get("tab") === "home" ? "home" : "kids";
 loadProducts().then((list) => {
-  $("#best").innerHTML = list.filter((p) => p.bestseller).slice(0, 8).map(productCard).join("") || list.slice(0, 8).map(productCard).join("");
-  $("#newgrid").innerHTML = list.filter((p) => p.isNew).slice(0, 4).map(productCard).join("");
+  const FEATURED_IDS = ["ice-cream-pen-holder", "cat-phone-holder", "fidget-balls-9pc", "astronaut-water-bottle"];
+  const featured = FEATURED_IDS.map((id) => list.find((p) => p.id === id)).filter(Boolean);
+  $("#trend").innerHTML = featured.map((p) => productCard(p, { eager: true, className: "feature" })).join("");
+  const draw = (tab) => {
+    $("#homeTabs").innerHTML = storeTabsHTML(tab, (k) => "/index.html?tab=" + k);
+    const html = groupedSectionsHTML(list.filter((p) => tabOf(p) === tab), tab, { limit: 5 });
+    $("#tabbed").innerHTML = html || '<div class="empty">No products here yet.</div>';
+  };
+  draw(startTab);
 });
 </script></body></html>

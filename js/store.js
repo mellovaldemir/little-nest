@@ -1,6 +1,41 @@
 /* ARROW storefront — shared code (header/footer, data loading, cart, product cards). */
 const FREE_SHIP = 35, SHIP_FEE = 4.99, CART_KEY = "arrow_cart", COUPON_KEY = "arrow_coupon";
-const CATEGORIES = { "on-the-go": "On the go", nursery: "Nursery", bath: "Bath time", safety: "Baby safety" };
+const BRAND = "ARROW";
+const CATEGORIES = {
+  "learn-play": "Learn & Play",
+  "room-bedtime": "Room & Bedtime",
+  "on-the-go": "On the Go",
+  "fidgets-teens": "Fidgets & Teens",
+  cleaning: "Cleaning",
+  kitchen: "Kitchen",
+  "desk-cable": "Desk & Cable",
+};
+const TABS = {
+  kids: { label: "Kids", cats: ["learn-play", "room-bedtime", "on-the-go", "fidgets-teens"] },
+  home: { label: "Home", cats: ["cleaning", "kitchen", "desk-cable"] },
+};
+const TAB_OF = Object.fromEntries(Object.entries(TABS).flatMap(([tab, x]) => x.cats.map((c) => [c, tab])));
+const tabOf = (p) => p.tab || TAB_OF[p.category] || "kids";
+const catLabel = (c) => CATEGORIES[c] || c;
+const storeTabsHTML = (active, hrefFor) => `<div class="store-tabs" role="tablist" aria-label="Shop section">
+  ${Object.entries(TABS).map(([k, x]) => {
+    const href = hrefFor ? hrefFor(k) : `/shop.html?tab=${k}`;
+    return `<a role="tab" aria-selected="${active === k}" class="${active === k ? "on" : ""}" href="${esc(href)}">${esc(x.label)}</a>`;
+  }).join("")}
+</div>`;
+function groupedSectionsHTML(list, tab, opts = {}) {
+  const cats = (TABS[tab] || TABS.kids).cats;
+  const chunks = cats.map((c) => ({ c, items: list.filter((p) => p.category === c) })).filter((x) => x.items.length);
+  if (!chunks.length) return "";
+  const limit = opts.limit || 0;
+  return chunks.map(({ c, items }) => {
+    const shown = limit ? items.slice(0, limit) : items;
+    return `<section class="cat-sec" id="sec-${esc(c)}">
+    <div class="sec-head"><h2>${esc(catLabel(c))}</h2><a href="/shop.html?tab=${esc(tab)}&cat=${esc(c)}">View all →</a></div>
+    <div class="grid">${shown.map((p) => productCard(p)).join("")}</div>
+  </section>`;
+  }).join("");
+}
 const money = (n) => "$" + Number(n || 0).toFixed(2);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const img = (u) => (!u ? "" : /^(https?:|data:|\/)/.test(u) ? u : "/" + u);
@@ -72,12 +107,14 @@ function cartTotals(products, coupon) {
 }
 
 /* ---------------- UI pieces ---------------- */
-function productCard(p) {
+function productCard(p, opts = {}) {
   const sale = p.compareAt && p.compareAt > p.price;
-  const pic = p.images && p.images.length
-    ? `<img src="${esc(img(p.images[0]))}" alt="${esc(p.name)}" loading="lazy">`
+  const eager = opts.eager ? "eager" : "lazy";
+  const imgs = (p.images || []).map(img);
+  const pic = imgs.length
+    ? `<img src="${esc(imgs[0])}" alt="${esc(p.name)}" loading="${eager}">${imgs[1] ? `<img class="swap" src="${esc(imgs[1])}" alt="" loading="${eager}">` : ""}`
     : `<div class="ph"><img src="${MASCOT}" alt=""><small>Photo coming soon</small></div>`;
-  return `<div class="card">
+  return `<div class="card${imgs[1] ? " has-swap" : ""}${opts.className ? " " + opts.className : ""}">
     <a class="pic" href="/product.html?id=${encodeURIComponent(p.id)}">${sale ? '<span class="tag">Sale</span>' : p.isNew ? '<span class="tag new">New</span>' : ""}${p.example ? '<span class="tag ex" title="Example product — replace before selling">Example</span>' : ""}${pic}</a>
     <div class="body"><h3><a href="/product.html?id=${encodeURIComponent(p.id)}">${esc(p.name)}</a></h3>
     <div class="row"><div class="price">${money(p.price)}${sale ? `<s>${money(p.compareAt)}</s>` : ""}</div>
@@ -99,9 +136,10 @@ function renderChrome(active) {
     <ul class="menu" id="siteMenu">
       <li class="m-only drawer-head"><a class="logo" href="/index.html" aria-label="ARROW home"><b>ARROW</b>${ARROW_SVG}</a><button class="burger-x" type="button" aria-label="Close menu">&times;</button></li>
       <li><a href="/shop.html" class="${active === "shop" ? "on" : ""}">Shop</a></li>
+      <li><a href="/shop.html?tab=kids" class="${active === "kids" ? "on" : ""}">Kids</a></li>
+      <li><a href="/shop.html?tab=home" class="${active === "home" ? "on" : ""}">Home</a></li>
       <li><a href="/shop.html?view=new" class="${active === "new" ? "on" : ""}">New</a></li>
       <li><a href="/shop.html?view=bestsellers" class="${active === "best" ? "on" : ""}">Bestsellers</a></li>
-      <li><a href="/shop.html?view=bundles" class="${active === "bundles" ? "on" : ""}">Bundles</a></li>
       <li><a href="/shop.html?view=sale" class="${active === "sale" ? "on" : ""}">Sale</a></li>
       <li class="m-only sep"><a href="/about.html" class="${active === "about" ? "on" : ""}">Our story</a></li>
       <li class="m-only"><a href="/policies.html" class="${active === "help" ? "on" : ""}">Help &amp; policies</a></li>
@@ -115,12 +153,12 @@ function renderChrome(active) {
    <div class="news"><div class="wrap"><h3>Get 10% off your first order</h3>
      <form id="newsForm"><input type="email" required placeholder="Your email address" aria-label="Email"><button class="btn sm">Subscribe</button></form></div></div>
    <div class="wrap fcols">
-     <div class="fbrand"><a class="logo" href="/index.html"><b>ARROW</b>${ARROW_SVG}</a><p>Simple, safe accessories for busy parents and their little adventurers.</p></div>
-     <div><h4>Shop</h4><a href="/shop.html">All products</a><a href="/shop.html?view=bestsellers">Bestsellers</a><a href="/shop.html?view=new">New arrivals</a><a href="/shop.html?view=sale">Sale</a></div>
+     <div class="fbrand"><a class="logo" href="/index.html"><b>ARROW</b>${ARROW_SVG}</a><p>Fun finds for kids &amp; home — simple things that spark a little curiosity.</p></div>
+     <div><h4>Shop</h4><a href="/shop.html">All products</a><a href="/shop.html?tab=kids">Kids</a><a href="/shop.html?tab=home">Home</a><a href="/shop.html?view=sale">Sale</a></div>
      <div><h4>Support</h4><a href="/policies.html#shipping">Shipping</a><a href="/policies.html#returns">Returns &amp; refunds</a><a href="/policies.html#faq">FAQ</a><a href="/about.html#contact">Contact us</a></div>
      <div><h4>About</h4><a href="/about.html">Our story</a><a href="/policies.html#privacy">Privacy policy</a><a href="/policies.html#terms">Terms of service</a><a href="mailto:hello@arrowbaby.com" class="email">hello@arrowbaby.com</a></div>
    </div>
-   <div class="fbottom"><div class="wrap"><span>© ${new Date().getFullYear()} ARROW Baby Accessories · All prices in USD</span>
+   <div class="fbottom"><div class="wrap"><span>© ${new Date().getFullYear()} ARROW · All prices in USD</span>
      <div class="pays"><span class="pp">Pay<i>Pal</i></span><span>VISA</span><span>Mastercard</span><span>AMEX</span></div></div></div></footer>`;
   updateCount();
   // mobile menu (hamburger) — the button is only visible on small screens

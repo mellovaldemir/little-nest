@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Product | ARROW Baby Accessories</title><meta name="description" content="ARROW — simple, safe baby accessories for busy parents. Free US shipping on orders over $35.">
+<title>Product | ARROW</title><meta name="description" content="ARROW — fun finds for kids and home. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
 <link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <div id="site-header"></div>
 <main class="wrap" id="pdp-root">
@@ -35,8 +35,9 @@ const id = new URLSearchParams(location.search).get("id");
   const all = await loadProducts();
   const p = all.find((x) => x.id === id);
   if (!p) { $("#pdp-root").innerHTML = '<div class="empty"><h2>Product not found</h2><a class="btn" href="/shop.html">Back to shop</a></div>'; return; }
-  document.title = p.name + " | ARROW Baby Accessories";
-  $("#crumbs").innerHTML = `<a href="/index.html">Home</a> › <a href="/shop.html?cat=${p.category}">${CATEGORIES[p.category] || "Shop"}</a> › ${esc(p.name)}`;
+  document.title = p.name + " | ARROW";
+  const tb = tabOf(p);
+  $("#crumbs").innerHTML = `<a href="/index.html">Home</a> › <a href="/shop.html?tab=${tb}">${esc(TABS[tb]?.label || "Shop")}</a> › <a href="/shop.html?tab=${tb}&cat=${p.category}">${esc(CATEGORIES[p.category] || "Shop")}</a> › ${esc(p.name)}`;
   $("#name").textContent = p.name;
   const sale = p.compareAt && p.compareAt > p.price;
   $("#price").innerHTML = money(p.price) + (sale ? `<s>${money(p.compareAt)}</s><span class="save">Save ${Math.round((1 - p.price / p.compareAt) * 100)}%</span>` : "");
@@ -58,12 +59,12 @@ const id = new URLSearchParams(location.search).get("id");
   else $("#stickybar").classList.add("show");
   const panes = {
     desc: `<p>${esc(p.description)}</p>${p.benefits?.length ? `<ul>${p.benefits.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : ""}`,
-    details: `<p><b>Category:</b> ${CATEGORIES[p.category] || "-"}</p><p><b>Care:</b> see the product label for cleaning instructions.</p>`,
+    details: `<p><b>Section:</b> ${esc(TABS[tabOf(p)]?.label || "-")}</p><p><b>Category:</b> ${esc(CATEGORIES[p.category] || "-")}</p><p><b>Care:</b> see the product label for cleaning instructions.</p>`,
     ship: `<p>Orders are processed in 1–2 business days and delivered in 3–7 business days within the US. Shipping is $4.99, free on orders over $35. Unused items can be returned within 30 days — see our <a href="/policies.html#returns">Returns policy</a>.</p>`,
   };
   const showPane = (t) => { $("#pane").innerHTML = panes[t]; $$(".tabs nav button").forEach((b) => b.classList.toggle("on", b.dataset.t === t)); };
   $$(".tabs nav button").forEach((b) => (b.onclick = () => showPane(b.dataset.t))); showPane("desc");
-  const rel = all.filter((x) => x.id !== p.id).sort((a, b) => (b.category === p.category) - (a.category === p.category)).slice(0, 4);
+  const rel = all.filter((x) => x.id !== p.id).sort((a, b) => (b.category === p.category) - (a.category === p.category) || (tabOf(b) === tabOf(p)) - (tabOf(a) === tabOf(p))).slice(0, 4);
   $("#related").innerHTML = rel.map(productCard).join("");
 })();
 </script></body></html>

@@ -7,9 +7,9 @@ const store = require("./_lib/storage");
 const { requireAdmin, isAdmin } = require("./_lib/auth");
 const { body, fail } = require("./_lib/util");
 
-const CATS = ["learn-play", "room-bedtime", "on-the-go", "fidgets-teens", "cleaning", "kitchen", "desk-cable"];
-const TABS = ["kids", "home"];
-const TAB_FOR = { "learn-play": "kids", "room-bedtime": "kids", "on-the-go": "kids", "fidgets-teens": "kids", cleaning: "home", kitchen: "home", "desk-cable": "home" };
+const CATS = ["learn-play", "room-bedtime", "on-the-go", "fidgets-teens", "cleaning", "kitchen", "desk-cable", "feeding-play", "grooming-cleanup", "car-organize", "car-clean", "car-mounts", "setup-stands", "wall-decor", "desk-fun"];
+const TABS = ["kids", "home", "pets", "car", "geek"];
+const TAB_FOR = { "learn-play": "kids", "room-bedtime": "kids", "on-the-go": "kids", "fidgets-teens": "kids", cleaning: "home", kitchen: "home", "desk-cable": "home", "feeding-play": "pets", "grooming-cleanup": "pets", "car-organize": "car", "car-clean": "car", "car-mounts": "car", "setup-stands": "geek", "wall-decor": "geek", "desk-fun": "geek" };
 const HIDDEN = ["cost", "shipCost", "cjLink", "cjSku", "supplier", "supplierId", "supplierUrl"];
 const slug = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
 const publicProduct = (p) => {

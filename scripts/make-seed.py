@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild products.json, settings.json and api/_lib/seed.json for the kids + home catalog.
+"""Rebuild products.json, settings.json and api/_lib/seed.json for the ARROW catalog.
 
 Retail prices are estimates: about 2–2.5× landed cost (supplier cost + extra shipping),
 rounded to end in .99. Each product has priceEstimate: true.
@@ -9,6 +9,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 P = []
+
+def product_images(pid):
+    out = []
+    main = ROOT / f"img/products/{pid}.webp"
+    if main.exists():
+        out.append(f"img/products/{pid}.webp")
+    for i in range(2, 8):
+        extra = ROOT / f"img/products/{pid}-{i}.webp"
+        if extra.exists():
+            out.append(f"img/products/{pid}-{i}.webp")
+    return out or [f"img/products/{pid}.webp"]
+
+
 
 
 def url(supplier, sid):
@@ -32,7 +45,7 @@ def add(**kw):
         "category": kw["category"],
         "description": kw["description"],
         "benefits": kw["benefits"],
-        "images": kw.get("images") or [f"img/products/{kw['id']}.jpg"],
+        "images": kw.get("images") or product_images(kw["id"]),
         "supplier": supplier,
         "supplierId": sid,
         "supplierUrl": url(supplier, sid),
@@ -180,18 +193,124 @@ add(id="ice-cream-pen-holder", name="Melting Ice-Cream Pen Holder", price=14.99,
     description="A 3D-printed pen holder that looks like a melting ice-cream cone. A tiny desk surprise that actually holds pens and pencils.",
     benefits=["Melting ice-cream design", "Holds pens and pencils", "Fun desk accent", "Ships from the US"])
 
+
+
+# ---- Pets · Feeding & Play ----
+add(id="cat-slow-feeder-bowl", name="2-in-1 Cat Slow Feeder Bowl", price=36.99, cost=16.42,
+    tab="pets", category="feeding-play", sort=23, best=True, new=True,
+    supplier="QKsource", supplierId="2044312503208022017",
+    description="A dual-mode bowl that slows down fast eaters without making mealtime a chore. Switch between a quicker meal and a slower puzzle so your cat actually chews.",
+    benefits=["Switchable fast and slow modes", "Helps reduce gulping", "Everyday feeding bowl", "Free US shipping"])
+
+add(id="dog-puzzle-feeder", name="3-in-1 Dog Puzzle Feeder", price=44.99, cost=19.00,
+    tab="pets", category="feeding-play", sort=24, new=True,
+    supplier="QKsource", supplierId="2008459342455554049",
+    description="A rotating slow-feeder bowl, lick mat and foraging puzzle in one. It turns dinner into a short brain game and keeps eager eaters from finishing in two bites.",
+    benefits=["Bowl, lick mat and puzzle in one", "Slows down fast eaters", "Mental stimulation at mealtime", "Free US shipping"])
+
+add(id="cat-toy-pillow", name="Cat Toy Pillow", price=29.99, cost=6.40, shipCost=7.16,
+    tab="pets", category="feeding-play", sort=25, new=True,
+    supplier="QKsource", supplierId="2117536666452176897",
+    description="A soft little pillow toy for batting, loafing and afternoon zoomies. Simple, cute, and the kind of thing a cat actually notices.",
+    benefits=["Soft pillow-style cat toy", "Easy to bat around the house", "Small enough for a window perch", "Ships from the US"])
+
+# ---- Pets · Grooming & Cleanup ----
+add(id="mini-pet-hair-remover", name="Mini Reusable Pet Hair Remover", price=24.99, cost=11.12,
+    tab="pets", category="grooming-cleanup", sort=26, best=True, new=True,
+    supplier="QKsource", supplierId="1903346609047252993",
+    description="A pocket-size reusable hair remover for the couch, the car seat and the sweater you just sat on. No refill rolls — just brush, empty and go again.",
+    benefits=["Reusable — no sticky sheets", "Works on couches, rugs and clothes", "Small enough to keep in a drawer", "Free US shipping"])
+
+add(id="pet-hair-lint-rollers", name="120-Sheet Pet Hair Lint Rollers", price=12.99, cost=5.50,
+    tab="pets", category="grooming-cleanup", sort=27, new=True,
+    supplier="QKsource", supplierId="2050128392833576961",
+    description="A mega-value lint roller set with 120 sticky sheets for pet hair on clothes, sofas and car seats. The simple cleanup tool you reach for every day.",
+    benefits=["120 extra-sticky sheets", "Picks up hair from fabric and upholstery", "Everyday pet-hair cleanup", "Free US shipping"])
+
+add(id="home-cleaning-pet-hair-remover", name="Home-Cleaning Pet Hair Remover", price=32.99, cost=13.99,
+    tab="pets", category="grooming-cleanup", sort=28, new=True,
+    supplier="QKsource", supplierId="2114436779738726402",
+    description="A larger pet-hair remover made for sofas, carpets and the spots the vacuum always seems to miss. One pass and the fur pile looks a lot more manageable.",
+    benefits=["Built for furniture and floors", "Reusable hair pickup", "Quick tidy between vacuum days", "Free US shipping"])
+
+# ---- Car · Organize ----
+add(id="car-seat-gap-organizer", name="Car Seat-Gap Storage Box", price=36.99, cost=16.24,
+    tab="car", category="car-organize", sort=29, best=True, new=True,
+    supplier="QKsource", supplierId="1996417407486447618",
+    description="A slim organizer that slips into the gap between the seat and the center console. Phones, cards and snacks stop disappearing down the side — and you gain a little extra storage.",
+    benefits=["Fills the seat-to-console gap", "Holds phone, cards and small extras", "Keeps the cabin tidier", "Free US shipping"])
+
+add(id="headrest-hanger-hooks", name="2-Piece Headrest Hanger Hooks", price=27.99, cost=12.44,
+    tab="car", category="car-organize", sort=30, new=True,
+    supplier="QKsource", supplierId="1985604446154305537",
+    description="Two hooks that clip onto the headrest posts so purses, grocery bags and jackets have somewhere to live instead of sliding across the back seat.",
+    benefits=["Set of 2 headrest hooks", "Holds bags, purses and jackets", "Clips on without tools", "Free US shipping"])
+
+# ---- Car · Clean ----
+add(id="car-vent-cleaning-gel", name="Interior Crevice/Vent Cleaning Gel", price=39.99, cost=16.99,
+    tab="car", category="car-clean", sort=31, new=True,
+    supplier="QKsource", supplierId="2099778828215816193",
+    description="A detailing putty that presses into vents, cup holders and the tiny gaps a cloth cannot reach. Press, lift, and the dust comes out with it.",
+    benefits=["Picks up dust from vents and crevices", "Reusable cleaning gel", "No sprays or extra tools", "Free US shipping"])
+
+add(id="car-interior-plastic-gel", name="Car Interior Plastic Cleaning Gel", price=32.99, cost=13.99,
+    tab="car", category="car-clean", sort=32, new=True,
+    supplier="QKsource", supplierId="2113691273764990977",
+    description="A gentle gel made for interior plastic — the dashboard, door panels and those textured bits that collect dust. Easy to use and kinder than a harsh spray.",
+    benefits=["Gentle on interior plastic", "Lifts dust from textured surfaces", "Simple press-and-lift cleanup", "Free US shipping"])
+
+# ---- Car · Mounts ----
+add(id="rearview-mirror-phone-mount", name="Universal Rearview-Mirror Phone Mount", price=21.99, cost=9.51,
+    tab="car", category="car-mounts", sort=33, new=True,
+    supplier="QKsource", supplierId="1941070939508797441",
+    description="A universal cradle that clips onto the rearview mirror so your phone or GPS sits in your line of sight — without another suction cup on the windshield.",
+    benefits=["Clips onto the rearview mirror", "Holds most phones and small GPS units", "No sticky dashboard pad", "Free US shipping"])
+
+# ---- Geek & Gamer · Setup & Stands ----
+add(id="mechanical-hand-stand", name="Mechanical Hand Controller Stand", price=36.99, cost=16.50,
+    tab="geek", category="setup-stands", sort=34, best=True, new=True,
+    supplier="QKsource", supplierId="2059153405504704513",
+    description="A sculptural mechanical hand that holds a controller, headphones or a necklace when you are not using them. Desk setup and conversation piece in one.",
+    benefits=["Holds a controller or headphones", "Robot-hand desk sculpture", "Doubles as a jewelry stand", "Free US shipping"])
+
+# ---- Geek & Gamer · Wall & Room Decor ----
+add(id="gamer-keep-out-sign", name="Gamer at Play — Keep Out Metal Sign", price=24.99, cost=11.00,
+    tab="geek", category="wall-decor", sort=35, new=True,
+    supplier="QKsource", supplierId="2116421589253939201",
+    description="A vintage-style metal sign that says what every gamer means: keep out, battling enemies, do not disturb. Easy wall decor for a bedroom, dorm or man cave.",
+    benefits=["Printed metal wall sign", "Classic “gamer at play” copy", "Ready to hang", "Free US shipping"])
+
+add(id="vintage-arcade-tin-sign", name="Vintage Arcade Tin Sign", price=16.99, cost=7.51,
+    tab="geek", category="wall-decor", sort=36, new=True,
+    supplier="QKsource", supplierId="2118207565498998786",
+    description="A small tin sign with vintage arcade energy — the kind of wall accent that makes a desk corner or game shelf feel finished.",
+    benefits=["Retro arcade wall accent", "Lightweight tin sign", "Easy to hang in a room or dorm", "Free US shipping"])
+
+# ---- Geek & Gamer · Desk Fun ----
 add(id="cat-phone-holder", name="Cat Phone Holder", price=19.99, cost=4.80, shipCost=4.00,
-    tab="home", category="desk-cable", sort=22, new=True,
+    tab="geek", category="desk-fun", sort=37, new=True,
     supplier="QKsource", supplierId="2103067398688845825",
     description="A cute 3D-printed cat that holds your phone on the desk while you watch a recipe, a show or a video call. Functional and a little ridiculous — in a good way.",
     benefits=["Cat-shaped phone stand", "Keeps a phone upright on the desk", "Small, giftable desk decor", "Ships from the US"])
+
+add(id="skeleton-hand-bookend", name="Skeleton-Hand Bookend", price=29.99, cost=8.90, shipCost=4.00,
+    tab="geek", category="desk-fun", sort=38, new=True,
+    supplier="QKsource", supplierId="2094681338373890049",
+    description="A skeleton hand that holds up a book, a game case or a stack of comics. Slightly spooky desk decor that is actually useful.",
+    benefits=["Holds books and game cases", "Skeleton-hand design", "Fun shelf or desk accent", "Ships from the US"])
+
+add(id="duck-pen-holder", name="3D-Printed Duck Pen Holder", price=32.99, cost=10.20, shipCost=4.00,
+    tab="geek", category="desk-fun", sort=39, new=True,
+    supplier="QKsource", supplierId="2102683560978309121",
+    description="A 3D-printed duck that holds pens on the desk. Same “how did I not own this” energy as the melting ice-cream holder — just slightly more unhinged.",
+    benefits=["Duck-shaped pen cup", "Holds pens and pencils", "A desk accent people notice", "Ships from the US"])
 
 
 settings = {
     "announcement": "Free US shipping on orders over $35",
     "contactEmail": "hello@arrowbaby.com",
     "slides": [
-        {"image": "img/slides/slide1.jpg", "headline": "Fun finds for kids & home", "subtitle": "Curious little things worth adding to the cart", "buttonText": "Shop the Quiver", "buttonLink": "shop.html"},
+        {"image": "img/slides/slide1.jpg", "headline": "Fun finds for kids, home, pets & more", "subtitle": "Curious little things worth adding to the cart", "buttonText": "Shop the Quiver", "buttonLink": "shop.html"},
         {"image": "img/slides/slide2.jpg", "headline": "Free shipping over $35", "subtitle": "Fast delivery from US warehouses", "buttonText": "Start shopping", "buttonLink": "shop.html"},
         {"image": "img/slides/slide3.jpg", "headline": "Play that actually teaches", "subtitle": "Wooden Peg Board Montessori · $24.99", "buttonText": "Shop now", "buttonLink": "product.html?id=wooden-peg-board"},
     ],

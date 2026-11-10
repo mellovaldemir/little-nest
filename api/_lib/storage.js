@@ -34,8 +34,8 @@ async function redis(cmd) {
 
 let seeded = false;
 // Bump when the shipped catalog must replace an older KV snapshot.
-// Version "2" = kids + home (22 products). Later admin edits are kept until the next bump.
-const CATALOG_VERSION = "2";
+// Version "3" = kids + home + pets + car + geek (38 products). Later admin edits are kept until the next bump.
+const CATALOG_VERSION = "3";
 async function ensureSeedKV() {
   if (seeded) return;
   const s = readSeed();

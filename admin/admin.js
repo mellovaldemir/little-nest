@@ -13,10 +13,18 @@ const CATS = {
   cleaning: "Cleaning",
   kitchen: "Kitchen",
   "desk-cable": "Desk & Cable",
+  "feeding-play": "Feeding & Play",
+  "grooming-cleanup": "Grooming & Cleanup",
+  "car-organize": "Organize",
+  "car-clean": "Clean",
+  "car-mounts": "Mounts",
+  "setup-stands": "Setup & Stands",
+  "wall-decor": "Wall & Room Decor",
+  "desk-fun": "Desk Fun",
 };
-const TAB_FOR = { "learn-play": "kids", "room-bedtime": "kids", "on-the-go": "kids", "fidgets-teens": "kids", cleaning: "home", kitchen: "home", "desk-cable": "home" };
-const TAB_LABEL = { kids: "Kids", home: "Home" };
-const CATS_GROUPED = `<optgroup label="Kids">${[["learn-play","Learn & Play"],["room-bedtime","Room & Bedtime"],["on-the-go","On the Go"],["fidgets-teens","Fidgets & Teens"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Home">${[["cleaning","Cleaning"],["kitchen","Kitchen"],["desk-cable","Desk & Cable"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup>`;
+const TAB_FOR = { "learn-play": "kids", "room-bedtime": "kids", "on-the-go": "kids", "fidgets-teens": "kids", cleaning: "home", kitchen: "home", "desk-cable": "home", "feeding-play": "pets", "grooming-cleanup": "pets", "car-organize": "car", "car-clean": "car", "car-mounts": "car", "setup-stands": "geek", "wall-decor": "geek", "desk-fun": "geek" };
+const TAB_LABEL = { kids: "Kids", home: "Home", pets: "Pets", car: "Car", geek: "Geek & Gamer" };
+const CATS_GROUPED = `<optgroup label="Kids">${[["learn-play","Learn & Play"],["room-bedtime","Room & Bedtime"],["on-the-go","On the Go"],["fidgets-teens","Fidgets & Teens"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Home">${[["cleaning","Cleaning"],["kitchen","Kitchen"],["desk-cable","Desk & Cable"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Pets">${[["feeding-play","Feeding & Play"],["grooming-cleanup","Grooming & Cleanup"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Car">${[["car-organize","Organize"],["car-clean","Clean"],["car-mounts","Mounts"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup><optgroup label="Geek & Gamer">${[["setup-stands","Setup & Stands"],["wall-decor","Wall & Room Decor"],["desk-fun","Desk Fun"]].map(([k,l]) => `<option value="${k}">${l}</option>`).join("")}</optgroup>`;
 const STATUS = { new: "New", sent_to_cj: "Sent to CJ", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled" };
 const MASCOT = "/img/brand/mascot.png";
 const I = {

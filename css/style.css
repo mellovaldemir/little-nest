@@ -22,7 +22,7 @@ header.site{background:var(--forest);position:sticky;top:0;z-index:30;box-shadow
 .search{flex:1;max-width:400px;display:flex;align-items:center;background:var(--cream);border-radius:10px;padding:0 12px}
 .search input{flex:1;border:0;background:transparent;padding:10px 4px;outline:0}
 .search button{background:none;border:0;cursor:pointer;display:flex;color:var(--forest)}
-.menu{display:flex;gap:24px;list-style:none;margin:0 0 0 auto;padding:0}
+.menu{display:flex;gap:16px;list-style:none;margin:0 0 0 auto;padding:0}
 .menu a{color:#f3ecd9;text-decoration:none;font-weight:700;font-size:.97rem}.menu a:hover,.menu a.on{color:#fff;text-decoration:underline;text-underline-offset:6px}
 .cart-link{position:relative;color:#f3ecd9;display:flex}.cart-count{position:absolute;top:-8px;right:-10px;background:var(--cream);color:var(--forest-d);border-radius:999px;font-size:.7rem;font-weight:800;min-width:19px;height:19px;display:grid;place-items:center;padding:0 4px}
 /* hero carousel */
@@ -117,8 +117,9 @@ footer.site{background:var(--forest);color:#e9e1cc;margin-top:40px}
 .toolbar h3{margin:0;font-size:1.3rem}
 select.sort{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-weight:700}
 .shop .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-.store-tabs{display:flex;gap:12px;margin:0 0 26px;flex-wrap:wrap}
-.store-tabs a{display:inline-flex;align-items:center;justify-content:center;min-width:148px;min-height:48px;padding:10px 28px;border-radius:999px;border:2px solid var(--forest);background:transparent;color:var(--forest);font-family:"Fredoka",sans-serif;font-weight:600;font-size:1.2rem;text-decoration:none;transition:.15s}
+.store-tabs{display:flex;gap:10px;margin:0 0 26px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.store-tabs::-webkit-scrollbar{display:none}
+.store-tabs a{display:inline-flex;align-items:center;justify-content:center;flex:none;white-space:nowrap;min-width:0;min-height:48px;padding:10px 22px;border-radius:999px;border:2px solid var(--forest);background:transparent;color:var(--forest);font-family:"Fredoka",sans-serif;font-weight:600;font-size:1.1rem;text-decoration:none;transition:.15s}
 .store-tabs a:hover{background:var(--sage-l)}
 .store-tabs a.on,.store-tabs a[aria-selected="true"]{background:var(--forest);color:#fbf5e6}
 .store-tabs a.on:hover{background:var(--forest-d)}
@@ -251,8 +252,8 @@ header.site.open .menu{transform:none;visibility:visible}
 section.block{padding:18px 0}
 .sec-head{align-items:center;margin-bottom:10px}.sec-head h2{font-size:1.35rem}
 .card:hover .pic img{transform:none}
-.store-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}
-.store-tabs a{min-width:0;width:100%;min-height:42px;font-size:1.05rem;padding:8px 12px}
+.store-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin:0 -16px 14px;padding:0 16px 4px;scrollbar-width:none}
+.store-tabs a{flex:none;width:auto;min-width:0;min-height:42px;font-size:.95rem;padding:8px 16px;white-space:nowrap}
 .cat-sec{margin:0 0 18px}
 
 .sec-head a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;margin-right:-6px;border-radius:999px;background:var(--sage-xl);font-size:.85rem}

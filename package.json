@@ -2,7 +2,7 @@
   "name": "arrow-store",
   "version": "2.0.0",
   "private": true,
-  "description": "ARROW kids and home store + admin panel (static site + Vercel serverless functions)",
+  "description": "ARROW kids, home, pets, car and geek store + admin panel (static site + Vercel serverless functions)",
   "scripts": { "dev": "node dev-server.js" },
   "engines": { "node": ">=18" }
 }

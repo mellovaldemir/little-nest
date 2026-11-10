@@ -9,10 +9,21 @@ const CATEGORIES = {
   cleaning: "Cleaning",
   kitchen: "Kitchen",
   "desk-cable": "Desk & Cable",
+  "feeding-play": "Feeding & Play",
+  "grooming-cleanup": "Grooming & Cleanup",
+  "car-organize": "Organize",
+  "car-clean": "Clean",
+  "car-mounts": "Mounts",
+  "setup-stands": "Setup & Stands",
+  "wall-decor": "Wall & Room Decor",
+  "desk-fun": "Desk Fun",
 };
 const TABS = {
   kids: { label: "Kids", cats: ["learn-play", "room-bedtime", "on-the-go", "fidgets-teens"] },
   home: { label: "Home", cats: ["cleaning", "kitchen", "desk-cable"] },
+  pets: { label: "Pets", cats: ["feeding-play", "grooming-cleanup"] },
+  car: { label: "Car", cats: ["car-organize", "car-clean", "car-mounts"] },
+  geek: { label: "Geek & Gamer", cats: ["setup-stands", "wall-decor", "desk-fun"] },
 };
 const TAB_OF = Object.fromEntries(Object.entries(TABS).flatMap(([tab, x]) => x.cats.map((c) => [c, tab])));
 const tabOf = (p) => p.tab || TAB_OF[p.category] || "kids";
@@ -136,8 +147,7 @@ function renderChrome(active) {
     <ul class="menu" id="siteMenu">
       <li class="m-only drawer-head"><a class="logo" href="/index.html" aria-label="ARROW home"><b>ARROW</b>${ARROW_SVG}</a><button class="burger-x" type="button" aria-label="Close menu">&times;</button></li>
       <li><a href="/shop.html" class="${active === "shop" ? "on" : ""}">Shop</a></li>
-      <li><a href="/shop.html?tab=kids" class="${active === "kids" ? "on" : ""}">Kids</a></li>
-      <li><a href="/shop.html?tab=home" class="${active === "home" ? "on" : ""}">Home</a></li>
+      ${Object.entries(TABS).map(([k, x]) => `<li><a href="/shop.html?tab=${k}" class="${active === k ? "on" : ""}">${esc(x.label)}</a></li>`).join("")}
       <li><a href="/shop.html?view=new" class="${active === "new" ? "on" : ""}">New</a></li>
       <li><a href="/shop.html?view=bestsellers" class="${active === "best" ? "on" : ""}">Bestsellers</a></li>
       <li><a href="/shop.html?view=sale" class="${active === "sale" ? "on" : ""}">Sale</a></li>
@@ -153,8 +163,8 @@ function renderChrome(active) {
    <div class="news"><div class="wrap"><h3>Get 10% off your first order</h3>
      <form id="newsForm"><input type="email" required placeholder="Your email address" aria-label="Email"><button class="btn sm">Subscribe</button></form></div></div>
    <div class="wrap fcols">
-     <div class="fbrand"><a class="logo" href="/index.html"><b>ARROW</b>${ARROW_SVG}</a><p>Fun finds for kids &amp; home — simple things that spark a little curiosity.</p></div>
-     <div><h4>Shop</h4><a href="/shop.html">All products</a><a href="/shop.html?tab=kids">Kids</a><a href="/shop.html?tab=home">Home</a><a href="/shop.html?view=sale">Sale</a></div>
+     <div class="fbrand"><a class="logo" href="/index.html"><b>ARROW</b>${ARROW_SVG}</a><p>Fun finds for kids, home, pets &amp; more — simple things that spark a little curiosity.</p></div>
+     <div><h4>Shop</h4><a href="/shop.html">All products</a>${Object.entries(TABS).map(([k, x]) => `<a href="/shop.html?tab=${k}">${esc(x.label)}</a>`).join("")}<a href="/shop.html?view=sale">Sale</a></div>
      <div><h4>Support</h4><a href="/policies.html#shipping">Shipping</a><a href="/policies.html#returns">Returns &amp; refunds</a><a href="/policies.html#faq">FAQ</a><a href="/about.html#contact">Contact us</a></div>
      <div><h4>About</h4><a href="/about.html">Our story</a><a href="/policies.html#privacy">Privacy policy</a><a href="/policies.html#terms">Terms of service</a><a href="mailto:hello@arrowbaby.com" class="email">hello@arrowbaby.com</a></div>
    </div>

@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shop | ARROW</title><meta name="description" content="ARROW — fun finds for kids and home. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
+<title>Shop | ARROW</title><meta name="description" content="ARROW — fun finds for kids, home, pets & more. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
 <link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <div id="site-header"></div>
-<section class="pagehero"><div class="wrap"><h1 id="title">Shop kids &amp; home</h1></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
+<section class="pagehero"><div class="wrap"><h1 id="title">Shop</h1></div><img class="mascot" src="/img/brand/mascot.png" alt=""></section>
 <div class="wrap shop">
   <aside class="filters" id="filters">
     <div class="grp"><h4>Category</h4><div id="catf"></div></div>
@@ -26,10 +26,10 @@ const params = new URLSearchParams(location.search);
 const view = params.get("view"), q = (params.get("q") || "").toLowerCase();
 const catParam = params.get("cat");
 let tab = params.get("tab") || (catParam && TAB_OF[catParam]) || (view || q ? "all" : "kids");
-if (tab !== "kids" && tab !== "home" && tab !== "all") tab = "kids";
-renderChrome({ new: "new", bestsellers: "best", bundles: "bundles", sale: "sale", kids: "kids", home: "home" }[view || (tab === "all" ? "shop" : tab)] || "shop");
-const TITLES = { new: "New arrivals", bestsellers: "Bestsellers", bundles: "Bundle & save 15%", sale: "On sale", kids: "Kids", home: "Home" };
-if (TITLES[view] || TITLES[tab]) $("#title").textContent = TITLES[view] || TITLES[tab] || "Shop kids & home";
+if (tab !== "all" && !TABS[tab]) tab = "kids";
+renderChrome({ new: "new", bestsellers: "best", bundles: "bundles", sale: "sale" }[view] || (tab === "all" ? "shop" : tab));
+const TITLES = { new: "New arrivals", bestsellers: "Bestsellers", bundles: "Bundle & save 15%", sale: "On sale", ...Object.fromEntries(Object.entries(TABS).map(([k, x]) => [k, x.label])) };
+if (TITLES[view] || TITLES[tab]) $("#title").textContent = TITLES[view] || TITLES[tab] || "Shop";
 if (q) $("#title").textContent = `Results for “${params.get("q")}”`;
 if (view === "bundles") $("#notice").innerHTML = '<div class="notice">🎯 Mix and match any products. Spend $50+ and use code <b>BUNDLE15</b> at checkout to save 15%.</div>';
 if (view === "sale") $("#sale").checked = true;
@@ -45,10 +45,10 @@ function drawCatFilters() {
   $("#catf").innerHTML = entries.map(([k, v]) => `<label><input type="checkbox" value="${k}" ${catParam === k ? "checked" : ""}> ${v}</label>`).join("");
 }
 drawCatFilters();
-$("#shopTabs").innerHTML = `<div class="store-tabs" role="tablist" aria-label="Shop section">
-  <a role="tab" class="${tab === "kids" ? "on" : ""}" href="/shop.html?tab=kids${view ? "&view=" + encodeURIComponent(view) : ""}${q ? "&q=" + encodeURIComponent(params.get("q")) : ""}">Kids</a>
-  <a role="tab" class="${tab === "home" ? "on" : ""}" href="/shop.html?tab=home${view ? "&view=" + encodeURIComponent(view) : ""}${q ? "&q=" + encodeURIComponent(params.get("q")) : ""}">Home</a>
-</div>`;
+$("#shopTabs").innerHTML = storeTabsHTML(tab === "all" ? "" : tab, (k) => {
+  const extra = `${view ? "&view=" + encodeURIComponent(view) : ""}${q ? "&q=" + encodeURIComponent(params.get("q")) : ""}`;
+  return `/shop.html?tab=${k}${extra}`;
+});
 
 loadProducts().then((all) => {
   const max = Math.ceil(Math.max(...all.map((p) => p.price), 10));
@@ -68,7 +68,7 @@ loadProducts().then((all) => {
     const nf = cats.length + (sale ? 1 : 0) + (pmax < max ? 1 : 0);
     $("#fcount").textContent = nf ? ` (${nf})` : "";
     $("#count").textContent = `${list.length} product${list.length === 1 ? "" : "s"}`;
-    const grouped = groupedSectionsHTML(list, tab === "all" ? "kids" : tab) + (tab === "all" ? groupedSectionsHTML(list, "home") : "");
+    const grouped = tab === "all" ? Object.keys(TABS).map((k) => groupedSectionsHTML(list, k)).join("") : groupedSectionsHTML(list, tab);
     // If sorting by something other than featured, still keep subtitle groups (items already sorted inside each group by the same comparator).
     $("#grid").innerHTML = list.length ? grouped : '<div class="empty" style="grid-column:1/-1">No products match these filters.</div>';
   }

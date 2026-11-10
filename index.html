@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fun finds for kids &amp; home | ARROW</title><meta name="description" content="ARROW — fun finds for kids and home. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
+<title>Fun finds for kids, home, pets &amp; more | ARROW</title><meta name="description" content="ARROW — fun finds for kids, home, pets & more. Curious everyday picks shipped from US warehouses. Free US shipping on orders over $35.">
 <link rel="icon" href="/img/brand/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <div id="site-header"></div>
 <section class="carousel" id="hero" aria-roledescription="carousel">
@@ -10,7 +10,7 @@
 <svg class="wave" viewBox="0 0 1200 22" preserveAspectRatio="none"><path d="M0 22V10c40 0 40-10 80-10s40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10 40-10 80-10 40 10 80 10V22z" fill="#faf5ea"/></svg>
 
 <nav class="chips m-only" aria-label="Shop by category">
-  <a href="/shop.html?tab=kids">Kids</a><a href="/shop.html?tab=home">Home</a><a href="/shop.html?view=new">✨ New</a><a href="/shop.html?cat=learn-play">Learn &amp; Play</a><a href="/shop.html?cat=fidgets-teens">Fidgets</a><a href="/shop.html?cat=cleaning">Cleaning</a><a href="/shop.html?cat=desk-cable">Desk &amp; Cable</a>
+  <a href="/shop.html?tab=kids">Kids</a><a href="/shop.html?tab=home">Home</a><a href="/shop.html?tab=pets">Pets</a><a href="/shop.html?tab=car">Car</a><a href="/shop.html?tab=geek">Geek &amp; Gamer</a><a href="/shop.html?view=new">✨ New</a>
 </nav>
 <section class="block trend"><div class="wrap">
   <div class="sec-head"><h2>Trending curiosities</h2><a href="/shop.html?view=bestsellers">Shop bestsellers →</a></div>
@@ -34,7 +34,7 @@
 renderChrome("home");
 $("#trust").innerHTML = [
   ["lock","Secure PayPal checkout","Pay with PayPal or card"],["ret","30-day returns","Easy, no-fuss returns"],
-  ["heart","Fun finds for kids & home","Curious, practical picks"],["truck","Fast US delivery","Free over $35"]]
+  ["heart","Fun finds for kids, home, pets & more","Curious, practical picks"],["truck","Fast US delivery","Free over $35"]]
   .map(([i,b,s]) => `<div class="t">${ICONS[i]}<div><b>${b}</b><span>${s}</span></div></div>`).join("");
 
 // ----- carousel (slides come from the admin panel → Banners) -----
@@ -56,9 +56,9 @@ $("#trust").innerHTML = [
   go(0); if (slides.length > 1) auto();
 })();
 
-const startTab = new URLSearchParams(location.search).get("tab") === "home" ? "home" : "kids";
+const startTab = TABS[new URLSearchParams(location.search).get("tab")] ? new URLSearchParams(location.search).get("tab") : "kids";
 loadProducts().then((list) => {
-  const FEATURED_IDS = ["ice-cream-pen-holder", "cat-phone-holder", "fidget-balls-9pc", "astronaut-water-bottle"];
+  const FEATURED_IDS = ["ice-cream-pen-holder", "mini-pet-hair-remover", "rearview-mirror-phone-mount", "mechanical-hand-stand"];
   const featured = FEATURED_IDS.map((id) => list.find((p) => p.id === id)).filter(Boolean);
   $("#trend").innerHTML = featured.map((p) => productCard(p, { eager: true, className: "feature" })).join("");
   const draw = (tab) => {
